@@ -8,6 +8,8 @@ import {
 } from "react-router-dom";
 import StatisticPage from './pages/StatisticPage/StatisticPage';
 import LoginPage from './pages/LoginPage/LoginPage';
+import AllProductsPage from './pages/ProductsPages/AllProductsPage/AllProductsPage';
+import { CreateProductPage } from './pages/CreateProductPage/CreateProductPage';
 const {Content,Sider} = Layout
 function App() {
   return (
@@ -25,6 +27,12 @@ function App() {
         </Routes>
         <Routes>
           <Route path='/Login' element={<LoginPage/>}/>
+        </Routes>
+        <Routes>
+          <Route path='/All' element={<AllProductsPage/>}/>
+        </Routes>
+        <Routes>
+          <Route path='/Create' element={<CreateProductPage/>}/>
         </Routes>
       </Content>
     </Layout>

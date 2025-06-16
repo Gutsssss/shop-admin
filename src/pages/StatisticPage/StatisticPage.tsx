@@ -4,8 +4,8 @@ import CertainBrandPie from "../../components/StatisticComponents/CertainBrandPi
 const StatisticPage: FC = () => {
     return (
         <div>
-            <DynamicSlotCard titleCard="Certain Brand" content={<CertainBrandPie/>}/>
-            <DynamicSlotCard titleCard="Certain Brand" content={<CertainBrandPie/>}/>
+            <DynamicSlotCard titleCard="Certain Brand" children={<CertainBrandPie/>}/>
+            <DynamicSlotCard titleCard="Certain Brand" children={<CertainBrandPie/>}/>
         </div>
     )
 }

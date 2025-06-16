@@ -1,14 +1,14 @@
-import type { FC, ReactElement } from 'react'
+import type { ReactNode } from 'react'
 import Card from 'antd/es/card/Card'
-interface DynamicSlotProps<T = unknown> {
-    content?: ReactElement<T>,
+interface DynamicSlotProps {
+    children?: ReactNode,
     titleCard:string
 }
 
-const DynamicSlotCard:FC<DynamicSlotProps> = ({content,titleCard}) => {
+const DynamicSlotCard = ({children,titleCard}:DynamicSlotProps) => {
     return (
         <Card title={titleCard}>
-            {content}
+            {children}
         </Card>
     )
 }
