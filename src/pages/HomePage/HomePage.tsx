@@ -7,6 +7,7 @@ const HomePage :FC = () => {
     const {items} = UseAppSelector(state => state.itemReducer)
     useEffect(() => {
         dispatch(fetchItems())
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[ ])
     return (
         <div>
