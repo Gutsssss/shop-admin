@@ -1,4 +1,4 @@
-import type { Itype } from './../../models/IType';
+import type { Itype } from '@models/IType';
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 interface TypeState {

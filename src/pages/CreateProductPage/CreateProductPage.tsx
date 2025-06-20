@@ -3,7 +3,7 @@ import { Button, Form, Input, message, Select, Upload } from "antd";
 import { useEffect, useState, type FC } from "react";
 import type { UploadFile, UploadProps } from "antd";
 import { UseAppDispatch, UseAppSelector } from "@hooks/redux";
-import { fetchBrands, fetchTypes } from "../../store/reducers/ActionCreators";
+import { fetchBrands, fetchTypes } from "@store/reducers/ActionCreators";
 
 const { TextArea } = Input;
 

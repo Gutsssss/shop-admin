@@ -1,4 +1,4 @@
-import type { IBrand } from './../../models/IBrand';
+import type { IBrand } from '@models/IBrand';
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 interface TypeState {

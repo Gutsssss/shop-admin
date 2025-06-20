@@ -7,7 +7,7 @@ const NavigationBar: FC = () => {
   const navigate = useNavigate()
   const onClick:MenuProps['onClick'] = (info) => {
     const {key} = info
-    navigate(key.toString())
+    navigate(`/${key}`)
   };
   return (
     <Menu

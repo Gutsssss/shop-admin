@@ -1,6 +1,6 @@
 import type { FC } from "react";
-import DynamicSlotCard from "../../components/DynamicSlotCard/DynamicSlotCard";
-import CertainBrandPie from "../../components/StatisticComponents/CertainBrandPie";
+import DynamicSlotCard from "@components/DynamicSlotCard/DynamicSlotCard";
+import CertainBrandPie from "@components/StatisticComponents/CertainBrandPie";
 const StatisticPage: FC = () => {
     return (
         <div>

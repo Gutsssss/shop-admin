@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { IShopItem } from "../../models/IShopItem";
+import type { IShopItem } from "@models/IShopItem";
 
 interface ItemsState {
   items: IShopItem[];
