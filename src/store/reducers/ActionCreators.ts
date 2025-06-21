@@ -3,9 +3,11 @@ import type { AppDispatch } from "../store";
 import {itemSlice} from './ItemSlice'
 import { typeSlice } from "./typeSlice";
 import { brandSlice } from "./brandSlice";
+import { jwtDecode } from "jwt-decode";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import {$host} from '../../http/index.js'
+import {$host,$authHost} from '../../http/index.js'
+import { userSlice } from "./userSlice.js";
 console.log(import.meta.env.VITE_APP_API_URL)
 export const fetchItems = () => async (dispatch:AppDispatch) =>{
     try {
@@ -37,11 +39,35 @@ export const fetchBrands = () => async (dispatch:AppDispatch) =>{
         dispatch(brandSlice.actions.brandFetchingError(err))
     }
 }
-export const login = async (email:string,password:string)  => {
-        const {data} = await $host.post('api/user/login',{email,password})
-        localStorage.setItem('token',data.token)
-        return data
-}
-export const check = async() => {
+export const login = (email: string, password: string) => async (dispatch: AppDispatch) => {
+  try {
+    dispatch(userSlice.actions.userFetching());
+    const { data } = await $host.post('api/user/login', { email, password });
     
+    const decodedUser = jwtDecode(data.token);
+    localStorage.setItem('token', data.token);
+    
+    dispatch(userSlice.actions.userFetchingSuccess(decodedUser));
+    return decodedUser;
+  } catch (err:any) {
+    const errorMessage = err.response?.data?.message || 'Login failed';
+    dispatch(userSlice.actions.userFetchingError(errorMessage));
+    throw errorMessage;
+  }
+};
+export const check = async() => async (dispatch: AppDispatch) => {
+    try {
+        dispatch(userSlice.actions.userFetching())
+        const {data} = await $authHost.get('api/user/auth')
+        localStorage.setItem('token',data.token)
+        const decodedUser = jwtDecode(data.token)
+        return decodedUser
+    }
+    catch(err:any) {
+    const errorMessage = err.response?.data?.message || 'Checks failed';
+    dispatch(userSlice.actions.userFetchingError(errorMessage));
+    throw errorMessage;
+    }
+
 }
+
