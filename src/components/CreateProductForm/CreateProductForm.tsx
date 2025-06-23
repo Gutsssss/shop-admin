@@ -1,55 +1,50 @@
 import { UploadOutlined } from "@ant-design/icons";
 import { Button, Form, Input, message, Select, Upload } from "antd";
-import { useEffect, useState, type FC } from "react";
-import type { UploadFile, UploadProps } from "antd";
-import { UseAppDispatch, UseAppSelector } from "@hooks/redux";
+import { useCallback, useEffect, useState, type FC } from "react";
+import type { UploadFile, UploadProps as uploadProps } from "antd";
+import { useAppDispatch, useAppSelector } from "@hooks/redux";
 import { fetchBrands, fetchTypes } from "@store/reducers/ActionCreators";
 
 const { TextArea } = Input;
+export const CreateProductForm: FC = () => {
+  const [state, setState] = useState({
+    name: "",
+    price: "",
+    brand: "",
+    type: "",
+    info: "",
+    file:null as UploadFile | null,
+  });
+  const setStateValue = (values:object) =>
+    setState((prev) => ({ ...prev, ...values }));
+  const changeType = useCallback((selectedId: string) => setStateValue({type:selectedId}),[])
+  const changeBrand = useCallback((selectedId: string) => setStateValue({brand:selectedId}),[])
+  const handleUpload: uploadProps["onChange"] = (info) => {
+    setStateValue({file:info.file})
+  };
 
- 
-
-export const CreateProductPage: FC = () => {
-
-
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
-  const [brand, setbrand] = useState("");
-  const [type, setType] = useState("");
-  const [info, setInfo] = useState("");
-  const [file, setFile] = useState<UploadFile | null>(null);
- const handleChangeType = (selectedId: string) => {
-  setType(selectedId);
-};
- const handleChangeBrand = (selectedId: string) => {
-  setbrand(selectedId);
-};
-  const handleUpload:UploadProps['onChange'] = (info) => {
-      console.log(info.file)
-  }
-
-  const dispatch = UseAppDispatch();
-  const { types } = UseAppSelector((state) => state.typeReducer);
-  const { brands } = UseAppSelector((state) => state.brandReducer);
+  const dispatch = useAppDispatch();
+  const { types } = useAppSelector((state) => state.typeReducer);
+  const { brands } = useAppSelector((state) => state.brandReducer);
   useEffect(() => {
     dispatch(fetchTypes());
-    dispatch(fetchBrands())
+    dispatch(fetchBrands());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const [form] = Form.useForm();
-const props: UploadProps = {
+  const props: uploadProps = {
     onChange: handleUpload,
     beforeUpload: (file) => {
-      const isImage = file.type.startsWith('image/');
+      const isImage = file.type.startsWith("image/");
       if (!isImage) {
-        message.error('Можно загружать только изображения!');
+        message.error("Можно загружать только изображения!");
         return Upload.LIST_IGNORE;
       }
-      setFile(file);
+      setStateValue({file:file});
       return false;
     },
-    fileList:file ? [file] : [],
-    maxCount:1
+    fileList: state.file ? [state.file] : [],
+    maxCount: 1,
   };
 
   return (
@@ -57,27 +52,30 @@ const props: UploadProps = {
       <Form style={{ margin: 20 }} form={form} layout="vertical" size="large">
         <Form.Item label="Name" required>
           <Input
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={state.name}
+            onChange={(e) => setStateValue({name:e.target.value})}
             placeholder="Введите название"
           />
         </Form.Item>
         <Form.Item label="Price" required>
           <Input
             prefix="₽"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
+            value={state.price}
+            onChange={(e) => setStateValue({price:e.target.value})}
             type="number"
             placeholder="Введите цену"
           />
         </Form.Item>
         <Form.Item label="Brand" required>
           <Select
-            value={brand}
-            onChange={handleChangeBrand}
+            value={state.brand}
+            onChange={changeBrand}
             showSearch
             filterOption={(input: string, option) =>
-              option?.children?.toLowerCase().includes(input.toLowerCase())
+              (option?.children ?? "")
+                .toString()
+                .toLowerCase()
+                .includes(input.toLowerCase())
             }
           >
             {brands.map((elem) => (
@@ -89,11 +87,14 @@ const props: UploadProps = {
         </Form.Item>
         <Form.Item label="Type" required>
           <Select
-            value={type}
-            onChange={handleChangeType}
+            value={state.type}
+            onChange={changeType}
             showSearch
             filterOption={(input: string, option) =>
-              option?.children?.toLowerCase().includes(input.toLowerCase())
+              (option?.children ?? "")
+                .toString()
+                .toLowerCase()
+                .includes(input.toLowerCase())
             }
           >
             {types.map((elem) => (
@@ -104,7 +105,7 @@ const props: UploadProps = {
           </Select>
         </Form.Item>
         <Form.Item label="Info">
-          <TextArea value={info} onChange={(e) => setInfo(e.target.value)} />
+          <TextArea value={state.info} onChange={(e) => setStateValue({info:e.target.value})} />
         </Form.Item>
         <Form.Item label="Image" required>
           <Upload {...props}>

@@ -1,73 +1,78 @@
-import axios from "axios";
+import { AxiosError } from "axios";
 import type { AppDispatch } from "../store";
-import {itemSlice} from './ItemSlice'
-import { typeSlice } from "./typeSlice";
-import { brandSlice } from "./brandSlice";
+import {itemsFetching,itemsFetchingSuccess,itemsFetchingError} from './ItemSlice'
+import { typeFetching,typeFetchingSuccess,typeFetchingError } from "./typeSlice";
+import { brandFetching,brandFetchingSuccess,brandFetchingError } from "./brandSlice";
 import { jwtDecode } from "jwt-decode";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import {$host,$authHost} from '../../http/index.js'
-import { userSlice } from "./userSlice.js";
-console.log(import.meta.env.VITE_APP_API_URL)
+import { userFetching,userFetchingSuccess,userFetchingError } from "./userSlice.js";
 export const fetchItems = () => async (dispatch:AppDispatch) =>{
     try {
-        dispatch(itemSlice.actions.itemsFetching())
-        const response = await $host.get('http://localhost:5000/api/shopitem')
-        dispatch(itemSlice.actions.itemsFetchingSuccess(response.data.rows))
+        dispatch(itemsFetching())
+        const response = await $host.get('api/shopitem')
+        dispatch(itemsFetchingSuccess(response.data.rows))
     }
     catch(err) {
-        dispatch(itemSlice.actions.itemsFetchingError(err))
+        dispatch(itemsFetchingError(err))
     }
 }
 export const fetchTypes = () => async (dispatch:AppDispatch) =>{
     try {
-        dispatch(typeSlice.actions.typeFetching())
-        const response = await axios.get('http://localhost:5000/api/type')
-        dispatch(typeSlice.actions.typeFetchingSuccess(response.data))
+        dispatch(typeFetching())
+        const response = await $host.get('api/type')
+        dispatch(typeFetchingSuccess(response.data))
     }
     catch(err) {
-        dispatch(typeSlice.actions.typeFetchingError(err))
+        dispatch(typeFetchingError(err))
     }
 }
 export const fetchBrands = () => async (dispatch:AppDispatch) =>{
     try {
-        dispatch(brandSlice.actions.brandFetching())
-        const response = await axios.get('http://localhost:5000/api/brand')
-        dispatch(brandSlice.actions.brandFetchingSuccess(response.data))
+        dispatch(brandFetching())
+        const response = await $host.get('api/brand')
+        dispatch(brandFetchingSuccess(response.data))
     }
     catch(err) {
-        dispatch(brandSlice.actions.brandFetchingError(err))
+        dispatch(brandFetchingError(err))
     }
 }
 export const login = (email: string, password: string) => async (dispatch: AppDispatch) => {
   try {
-    dispatch(userSlice.actions.userFetching());
+    dispatch(userFetching());
     const { data } = await $host.post('api/user/login', { email, password });
     
     const decodedUser = jwtDecode(data.token);
     localStorage.setItem('token', data.token);
     
-    dispatch(userSlice.actions.userFetchingSuccess(decodedUser));
+    dispatch(userFetchingSuccess(decodedUser));
     return decodedUser;
-  } catch (err:any) {
-    const errorMessage = err.response?.data?.message || 'Login failed';
-    dispatch(userSlice.actions.userFetchingError(errorMessage));
+  } catch (err:unknown) {
+    let errorMessage = 'Login failed'
+    if(err instanceof AxiosError && err.response?.data?.message) {
+        errorMessage = err.response?.data?.message 
+    }
+    dispatch(userFetchingError(errorMessage));
     throw errorMessage;
   }
 };
 export const check = async() => async (dispatch: AppDispatch) => {
     try {
-        dispatch(userSlice.actions.userFetching())
+        dispatch(userFetching())
         const {data} = await $authHost.get('api/user/auth')
         localStorage.setItem('token',data.token)
         const decodedUser = jwtDecode(data.token)
         return decodedUser
     }
-    catch(err:any) {
-    const errorMessage = err.response?.data?.message || 'Checks failed';
-    dispatch(userSlice.actions.userFetchingError(errorMessage));
-    throw errorMessage;
+    catch (err:unknown) {
+    let errorMessage = 'Checks failed'
+    if(err instanceof AxiosError && err.response?.data?.message) {
+        errorMessage = err.response?.data?.message 
     }
+    dispatch(userFetchingError(errorMessage));
+    throw errorMessage;
+  }
 
 }
 

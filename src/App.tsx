@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import StatisticPage from "@pages/StatisticPage/StatisticPage";
 import LoginPage from "@pages/LoginPage/LoginPage";
 import AllProductsPage from "@pages/ProductsPages/AllProductsPage/AllProductsPage";
-import { CreateProductPage } from "@pages/CreateProductPage/CreateProductPage";
+import { CreateProductPage } from "@pages/ProductsPages/CreateProductPage/CreateProductPage";
 const { Content, Sider } = Layout;
 function App() {
   const isLoginPage = location.pathname.toLowerCase() === '/login';

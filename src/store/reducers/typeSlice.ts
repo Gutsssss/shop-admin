@@ -32,4 +32,5 @@ export const typeSlice = createSlice({
   },
 });
 
+export const {typeFetching,typeFetchingSuccess,typeFetchingError} = typeSlice.actions;
 export const typeReducer = typeSlice.reducer;

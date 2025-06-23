@@ -1,11 +1,10 @@
 import { Card } from "antd";
 import Meta from "antd/es/card/Meta";
-import type { FC } from "react";
 import { type IShopItem } from "../../models/IShopItem";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 
 
-export const ItemCard:FC<IShopItem> = ({name,price,rating}) => {
+export const ItemCard = ({name,price,rating}:IShopItem) => {
     return (
         <Card
         style={{ width: 300,margin:10 }}

@@ -1,5 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { IUser } from "@models/IUser";
+import type { JwtPayload } from "jwt-decode";
 
 interface UserState {
   user: IUser | null;
@@ -27,11 +28,11 @@ export const userSlice = createSlice({
       state.isLoading = true;
       state.error = null; // Сбрасываем ошибку при новом запросе
     },
-    userFetchingSuccess(state, action: PayloadAction<any>) {
+    userFetchingSuccess(state, action: PayloadAction<IUser | JwtPayload>) {
       state.isLoading = false;
       state.error = null;
       state.isAuth = true;
-      state.user = action.payload;
+      state.user = action.payload as IUser
     },
     userFetchingError(state, action: PayloadAction<string>) {
       state.isLoading = false;
@@ -46,4 +47,5 @@ export const userSlice = createSlice({
   },
 });
 
-export const userReducer = userSlice.reducer;
+export const {userFetching,userFetchingSuccess,userFetchingError,logout} = userSlice.actions;
+export const userReducer = userSlice.reducer

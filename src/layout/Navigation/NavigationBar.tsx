@@ -1,14 +1,12 @@
-import {type FC} from 'react';
 import { Menu, type MenuProps } from 'antd';
 import {routes} from '../../constants/routes'
 import { useNavigate } from 'react-router-dom';
-
-const NavigationBar: FC = () => {
+import { useCallback } from 'react';
+const NavigationBar = () => {
   const navigate = useNavigate()
-  const onClick:MenuProps['onClick'] = (info) => {
-    const {key} = info
-    navigate(`${key}`)
-  };
+  const onClick:MenuProps['onClick'] = useCallback((info: {key:string}) => {
+    navigate(info.key)
+  },[navigate]);
   return (
     <Menu
       onClick={onClick}

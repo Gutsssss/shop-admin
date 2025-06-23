@@ -32,4 +32,5 @@ export const brandSlice = createSlice({
   },
 });
 
+export const {brandFetching,brandFetchingSuccess,brandFetchingError} = brandSlice.actions;
 export const brandReducer = brandSlice.reducer;

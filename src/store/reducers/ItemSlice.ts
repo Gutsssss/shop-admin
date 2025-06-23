@@ -32,4 +32,5 @@ export const itemSlice = createSlice({
   },
 });
 
+export const {itemsFetching,itemsFetchingError,itemsFetchingSuccess} = itemSlice.actions;
 export const itemReducer = itemSlice.reducer;
