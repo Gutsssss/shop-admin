@@ -6,7 +6,7 @@ import { ItemCard } from "@components/ItemCard/ItemCard";
 
 const AllProductsPage = () => {
   const dispatch = useAppDispatch();
-  const { items, isLoading } = useAppSelector((state) => state.itemReducer);
+  const { items, isLoading,error } = useAppSelector((state) => state.itemReducer);
   useEffect(() => {
     dispatch(fetchItems());
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -20,12 +20,13 @@ const AllProductsPage = () => {
         <ItemCard
           key={item.id}
           id={item.id}
-          img=""
+          img={item.img}
           name={item.name}
           price={item.price}
           typeId={item.typeId}
           brandId={item.brandId}
           rating={item.rating}
+          messageText={error}
         />
       ))}
     </div>

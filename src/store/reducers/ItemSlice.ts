@@ -5,12 +5,14 @@ interface ItemsState {
   items: IShopItem[];
   isLoading: boolean;
   error: string | unknown;
+  item:IShopItem | null
 }
 
 const initialState: ItemsState = {
   items: [],
   isLoading: false,
   error: "",
+  item:null
 };
 
 export const itemSlice = createSlice({
@@ -25,6 +27,10 @@ export const itemSlice = createSlice({
       state.error = '';
       state.items = actions.payload
     },
+    getOneItem(state,actions) {
+      state.isLoading = false
+      state.item = actions.payload
+    },
     itemsFetchingError(state, actions:PayloadAction<string | unknown>) {
       state.isLoading = false;
       state.error = actions.payload
@@ -32,5 +38,5 @@ export const itemSlice = createSlice({
   },
 });
 
-export const {itemsFetching,itemsFetchingError,itemsFetchingSuccess} = itemSlice.actions;
+export const {itemsFetching,itemsFetchingError,itemsFetchingSuccess,getOneItem} = itemSlice.actions;
 export const itemReducer = itemSlice.reducer;

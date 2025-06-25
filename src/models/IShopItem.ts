@@ -7,5 +7,6 @@ export interface IShopItem {
     createdAt?:Date | string,
     updatedAr?:Date | string,
     typeId:number,
-    brandId:number
+    brandId:number,
+    messageText?:string | unknown
 }

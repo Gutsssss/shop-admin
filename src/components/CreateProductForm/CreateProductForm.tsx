@@ -3,17 +3,17 @@ import { Button, Form, Input, message, Select, Upload } from "antd";
 import { useCallback, useEffect, useState, type FC } from "react";
 import type { UploadFile, UploadProps as uploadProps } from "antd";
 import { useAppDispatch, useAppSelector } from "@hooks/redux";
-import { fetchBrands, fetchTypes } from "@store/reducers/ActionCreators";
+import { createProductOnApi, fetchBrands, fetchTypes } from "@store/reducers/ActionCreators";
 
 const { TextArea } = Input;
 export const CreateProductForm: FC = () => {
   const [state, setState] = useState({
     name: "",
-    price: "",
-    brand: "",
-    type: "",
+    price: '',
+    brand: '',
+    type: '',
+    file:'' as UploadFile | '',
     info: "",
-    file:null as UploadFile | null,
   });
   const setStateValue = (values:object) =>
     setState((prev) => ({ ...prev, ...values }));
@@ -46,7 +46,22 @@ export const CreateProductForm: FC = () => {
     fileList: state.file ? [state.file] : [],
     maxCount: 1,
   };
-
+  const formData = new FormData()
+  formData.append('name',state.name)
+  formData.append('price',state.price)
+  formData.append('brand',state.brand)
+  formData.append('type',state.type)
+  formData.append('img',state.file)
+  formData.append('info',JSON.stringify(state.info) )
+  const createProduct = async () => {
+    console.log(state)
+    try {
+        dispatch(await createProductOnApi(state.name,state.price,state.brand,state.type,state.file,state.info))
+    } catch (error) {
+      console.log(error)
+    }
+    
+  }
   return (
     <div>
       <Form style={{ margin: 20 }} form={form} layout="vertical" size="large">
@@ -112,7 +127,7 @@ export const CreateProductForm: FC = () => {
             <Button icon={<UploadOutlined />}>Click to Upload</Button>
           </Upload>
         </Form.Item>
-        <Button type="primary">Создать</Button>
+        <Button onClick={() => createProduct()} type="primary">Создать</Button>
       </Form>
     </div>
   );

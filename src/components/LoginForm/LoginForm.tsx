@@ -34,7 +34,6 @@ export const LoginForm = () => {
   useEffect(() => {
     if (isAuth && user?.role === 'ADMIN') {
       navigate("/home");
-      console.log(user?.role)
     }
     if(error) {
       errorMessage(error as string)

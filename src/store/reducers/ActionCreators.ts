@@ -1,9 +1,10 @@
 import { AxiosError } from "axios";
 import type { AppDispatch } from "../store";
-import {itemsFetching,itemsFetchingSuccess,itemsFetchingError} from './ItemSlice'
+import {itemsFetching,itemsFetchingSuccess,itemsFetchingError,getOneItem} from './ItemSlice'
 import { typeFetching,typeFetchingSuccess,typeFetchingError } from "./typeSlice";
 import { brandFetching,brandFetchingSuccess,brandFetchingError } from "./brandSlice";
 import { jwtDecode } from "jwt-decode";
+import type { UploadFile } from "antd";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import {$host,$authHost} from '../../http/index.js'
@@ -76,3 +77,26 @@ export const check = async() => async (dispatch: AppDispatch) => {
 
 }
 
+export const deleteProductFromApi = async(id:number) => async (dispatch: AppDispatch) => {
+    try {
+        dispatch(itemsFetching())
+        const response =  await $authHost.delete(`api/shopitem/${id}`)
+        dispatch(getOneItem(response.data))
+        return response
+    } 
+    catch(err) {
+        dispatch(itemsFetchingError(err))
+    }
+}
+export const createProductOnApi = async(name:string,price:number | string,brandId:number | string,typeId:number | string,img:UploadFile | '',info:string) => async (dispatch:AppDispatch) => {
+    try {
+        dispatch(itemsFetching())
+        await $authHost.post('api/shopitem',{name,price,brandId,typeId,img,info},{
+            headers:{
+                'Content-Type': 'multipart/form-data',
+            }
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
