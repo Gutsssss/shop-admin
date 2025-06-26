@@ -3,7 +3,8 @@ import { useAppDispatch, useAppSelector } from "@hooks/redux";
 import { fetchItems } from "@store/reducers/ActionCreators";
 import { Loader } from "@components/LoadingComp/LoadingComp";
 import { ItemCard } from "@components/ItemCard/ItemCard";
-
+import { MyInput } from "@components/MyInput/MyInput";
+import style from './AllProductsPage.module.css'
 const AllProductsPage = () => {
   const dispatch = useAppDispatch();
   const { items, isLoading,error } = useAppSelector((state) => state.itemReducer);
@@ -16,6 +17,8 @@ const AllProductsPage = () => {
   }
   return (
     <div>
+      <MyInput/>
+      <div className={style.mainProducts}>
       {items.map((item) => (
         <ItemCard
           key={item.id}
@@ -29,6 +32,7 @@ const AllProductsPage = () => {
           messageText={error}
         />
       ))}
+    </div>
     </div>
   );
 };

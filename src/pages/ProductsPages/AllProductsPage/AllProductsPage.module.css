@@ -1,6 +1,6 @@
 .mainProducts {
     display:flex;
     width: 100vh;
-    justify-content: center;
     margin: auto;
+    flex-wrap: wrap
 }
