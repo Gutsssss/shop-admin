@@ -1,12 +1,14 @@
-import Search from "antd/es/transfer/search";
-import { useState } from "react";
+import { Input } from 'antd';
+interface MyInputProps {
+  input: string;
+  onChangeInput: (e: string) => void;
+}
 
-export const MyInput = () => {
-  const [input, setInput] = useState("");
+export const MyInput = ({ input, onChangeInput }:MyInputProps) => {
   return (
-    <Search
+    <Input.Search
       value={input}
-      onChange={(e) => setInput(e.target.value)}
+      onChange={(e) => onChangeInput(e.target.value)}
       placeholder="Start typing the text for the search product"
     />
   );

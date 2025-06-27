@@ -45,7 +45,7 @@ export const ItemCard = ({name,price,rating,id,img,messageText}:IShopItem) => {
         >
             <h1>{name}</h1>
             <Meta
-      title={price}
+      title={`${price} ₽`}
       description={rating}
     />
         </Card>

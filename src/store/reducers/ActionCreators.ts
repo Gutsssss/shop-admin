@@ -46,7 +46,6 @@ export const login = (email: string, password: string) => async (dispatch: AppDi
     
     const decodedUser = jwtDecode(data.token);
     localStorage.setItem('token', data.token);
-    
     dispatch(userFetchingSuccess(decodedUser));
     return decodedUser;
   } catch (err:unknown) {
@@ -100,3 +99,15 @@ export const createProductOnApi = async(name:string,price:number | string,brandI
         console.log(error)
     }
 }
+export const searchProducts = (searchValue: string) => async (dispatch: AppDispatch) => {
+  try {
+    dispatch(itemsFetching());
+    const response = await $host.get(`api/shopitem/search/${searchValue}`);
+    dispatch(itemsFetchingSuccess(response.data));
+    return response.data;
+  } catch (err) {
+    const error = err as Error;
+    dispatch(itemsFetchingError(error.message));
+    throw error;
+  }
+};

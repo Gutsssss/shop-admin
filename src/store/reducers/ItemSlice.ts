@@ -24,7 +24,6 @@ export const itemSlice = createSlice({
     },
     itemsFetchingSuccess(state, actions) {
       state.isLoading = false;
-      state.error = '';
       state.items = actions.payload
     },
     getOneItem(state,actions) {
