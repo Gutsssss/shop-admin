@@ -42,7 +42,6 @@ export const userSlice = createSlice({
     logout(state) {
       state.user = null;
       state.isAuth = false;
-      localStorage.removeItem('token');
     }
   },
 });

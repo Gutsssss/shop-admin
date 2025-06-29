@@ -26,24 +26,22 @@ export const LoginForm = () => {
   const auth = async() => {
     try {
       const userData = await dispatch(login(email, password));
-      console.log("User data:", userData);
+      return userData
     } catch (err) {
       console.error("Auth error:", err);
     }
   };
   useEffect(() => {
-    if (isAuth && user?.role === 'ADMIN') {
-      navigate("/home");
-    }
-    if(error) {
-      errorMessage(error as string)
-    }
-    if (isAuth && user?.role !== 'ADMIN') {
-        errorMessage('Такого пользователья не существует')
-        navigate('/login')
-      }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuth,error, navigate]);
+  if (isAuth && user?.role === 'ADMIN') {
+    navigate("/home", { replace: true });
+  } else if (error) {
+    errorMessage(error as string);
+    navigate('/login', { replace: true });
+  } else if (isAuth && user?.role !== 'ADMIN') {
+    errorMessage('Такого пользователя не существует');
+    navigate('/login', { replace: true });
+  }
+}, [isAuth, error, user?.role, navigate]);
 
   return (
     <div>

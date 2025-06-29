@@ -5,10 +5,11 @@ import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useAppDispatch } from "@hooks/redux";
 import { deleteProductFromApi } from "@store/reducers/ActionCreators";
 
+type ItemCardProps = IShopItem & {messageText:string}
 
-export const ItemCard = ({name,price,rating,id,img,messageText}:IShopItem) => {
+export const ItemCard = ({name,price,rating,id,img,messageText}:ItemCardProps) => {
     const dispatch = useAppDispatch();
-    const [messageApi,contextHolder] = message.useMessage()
+    const [messageApi] = message.useMessage()
     const successMessage = (text:string) => {
         messageApi.open({
             type:'success',
@@ -17,13 +18,13 @@ export const ItemCard = ({name,price,rating,id,img,messageText}:IShopItem) => {
     }
     const errorMessage = (text:string) => {
         messageApi.open({
-            type:'success',
+            type:'error',
             content: `${text}`
         })
     }
-    const deleteProduct = async (id: number) => {
+    const deleteProduct = (id: number) => {
         try {
-            dispatch(await deleteProductFromApi(id))
+            dispatch(deleteProductFromApi(id))
             successMessage(`Товар с id:${id} успешно удален`)
         }
         catch(err) {
@@ -31,16 +32,14 @@ export const ItemCard = ({name,price,rating,id,img,messageText}:IShopItem) => {
             errorMessage(messageText as string)
         }
     }
-    
     return (
         <>
-        {contextHolder}
         <Card
         style={{ width: 300,margin:10 }}
         cover={<img loading="lazy" style={{maxHeight:300,objectFit:'cover'}} alt="example" src={`${import.meta.env.VITE_APP_API_URL}${img}`} />}
         actions={[
       <EditOutlined key="edit" />,
-      <DeleteOutlined onClick={() => deleteProduct(id)} style={{color:'red'}} key="delete" />
+      <DeleteOutlined onClick={() => deleteProduct(id!)} style={{color:'red'}} key="delete" />
     ]}
         >
             <h1>{name}</h1>

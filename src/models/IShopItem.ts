@@ -1,12 +1,14 @@
+import type { UploadFile } from "antd";
+
 export interface IShopItem {
-    id:number,
+    id?:number,
     name:string,
-    price:number,
+    price:number | string,
     rating?:number,
-    img:string,
+    img:UploadFile | null,
+    info?:string,
     createdAt?:Date | string,
     updatedAr?:Date | string,
-    typeId:number,
-    brandId:number,
-    messageText?:string | unknown
+    typeId:number | string,
+    brandId:number | string,
 }

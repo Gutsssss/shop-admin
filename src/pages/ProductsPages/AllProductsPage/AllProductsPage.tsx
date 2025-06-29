@@ -32,6 +32,7 @@ const AllProductsPage = () => {
 
   return (
     <div>
+      
       <MyInput input={input} onChangeInput={handleInputChange}/>
       <div className={style.mainProducts}>
         {items?.length > 0 ? (

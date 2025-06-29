@@ -4,11 +4,11 @@ import {itemsFetching,itemsFetchingSuccess,itemsFetchingError,getOneItem} from '
 import { typeFetching,typeFetchingSuccess,typeFetchingError } from "./typeSlice";
 import { brandFetching,brandFetchingSuccess,brandFetchingError } from "./brandSlice";
 import { jwtDecode } from "jwt-decode";
-import type { UploadFile } from "antd";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import {$host,$authHost} from '../../http/index.js'
-import { userFetching,userFetchingSuccess,userFetchingError } from "./userSlice.js";
+import { userFetching,userFetchingSuccess,userFetchingError,logout} from "./userSlice.js";
+import type { IShopItem } from "@models/IShopItem.js";
 export const fetchItems = () => async (dispatch:AppDispatch) =>{
     try {
         dispatch(itemsFetching())
@@ -57,12 +57,13 @@ export const login = (email: string, password: string) => async (dispatch: AppDi
     throw errorMessage;
   }
 };
-export const check = async() => async (dispatch: AppDispatch) => {
+export const check = () => async (dispatch: AppDispatch) => {
+    dispatch(userFetching())
     try {
-        dispatch(userFetching())
         const {data} = await $authHost.get('api/user/auth')
         localStorage.setItem('token',data.token)
         const decodedUser = jwtDecode(data.token)
+        dispatch(userFetchingSuccess(decodedUser))
         return decodedUser
     }
     catch (err:unknown) {
@@ -73,10 +74,20 @@ export const check = async() => async (dispatch: AppDispatch) => {
     dispatch(userFetchingError(errorMessage));
     throw errorMessage;
   }
-
+}
+export const logoutAndRemoveToken = () => async (dispatch:AppDispatch) => {
+    try {
+        dispatch(logout())
+        console.log(localStorage.getItem('token'))
+        localStorage.removeItem('token');
+    }
+    catch(err) {
+        console.log(err)
+    }
+    
 }
 
-export const deleteProductFromApi = async(id:number) => async (dispatch: AppDispatch) => {
+export const deleteProductFromApi = (id:number | undefined) => async (dispatch: AppDispatch) => {
     try {
         dispatch(itemsFetching())
         const response =  await $authHost.delete(`api/shopitem/${id}`)
@@ -87,10 +98,10 @@ export const deleteProductFromApi = async(id:number) => async (dispatch: AppDisp
         dispatch(itemsFetchingError(err))
     }
 }
-export const createProductOnApi = async(name:string,price:number | string,brandId:number | string,typeId:number | string,img:UploadFile | '',info:string) => async (dispatch:AppDispatch) => {
+export const createProductOnApi = async(product:IShopItem) => async (dispatch:AppDispatch) => {
     try {
         dispatch(itemsFetching())
-        await $authHost.post('api/shopitem',{name,price,brandId,typeId,img,info},{
+        await $authHost.post('api/shopitem',product,{
             headers:{
                 'Content-Type': 'multipart/form-data',
             }

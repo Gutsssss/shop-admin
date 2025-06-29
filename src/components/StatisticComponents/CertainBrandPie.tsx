@@ -3,6 +3,7 @@ import { Loader } from '@components/LoadingComp/LoadingComp';
 import { useAppDispatch,useAppSelector } from '@hooks/redux';
 import { fetchBrands, fetchItems } from '@store/reducers/ActionCreators';
 import { useEffect } from 'react';
+import { configPie } from '../../Static/baseConfigPie';
 const CertainBrandPie = () => {
     const dispatch = useAppDispatch();
   const { brands } = useAppSelector((state) => state.brandReducer);
@@ -16,36 +17,19 @@ const CertainBrandPie = () => {
       return <Loader />;
     }
   const filterBrands = (brandId:number) => {
-    const productWithBrand = [...items].filter(prod => prod.brandId === brandId)
+    const productWithBrand = items.filter(prod => prod.brandId === brandId)
     return productWithBrand.length
   }
-  const getData = () => {
-    const res:Array<object> = [];
-    if(brands.length !== 0) {
-      brands.map(elem => {
-     res.push({type:elem.name,quantity:filterBrands(elem.id)})
-    })
-    }
-    return res
+  const modifyData = () => {
+    return brands.map(elem => ({
+      type:elem.name,
+      quantity:filterBrands(elem.id)
+    }))
   }
-    const data = getData()
+    const data = modifyData()
     const config = {
     data,
-    angleField: 'quantity',
-    colorField: 'type',
-    label: {
-      text: 'type',
-      style: {
-        fontWeight: 'bold',
-      },
-    },
-    legend: {
-      color: {
-        title: false,
-        position: 'right',
-        rowPadding: 5,
-      },
-    },
+    ...configPie
   };
     return (
         <Pie {...config}/>
