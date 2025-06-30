@@ -1,34 +1,84 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-
+import NavigationBar from "./layout/Navigation/NavigationBar";
+import { Layout } from "antd";
+import HomePage from "@pages/HomePage/HomePage";
+import {
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import StatisticPage from "@pages/StatisticPage/StatisticPage";
+import LoginPage from "@pages/LoginPage/LoginPage";
+import AllProductsPage from "@pages/ProductsPages/AllProductsPage/AllProductsPage";
+import { CreateProductPage } from "@pages/ProductsPages/CreateProductPage/CreateProductPage";
+import { ProtectedRoute } from "@components/ProtectedRoute/ProtectedRoute";
+import { useAppDispatch, useAppSelector } from "@hooks/redux";
+import { check, logoutAndRemoveToken } from "@store/reducers/ActionCreators";
+import { useEffect } from "react";
+import { Loader } from "@components/Loader/Loader";
+const { Content, Sider } = Layout;
 function App() {
-  const [count, setCount] = useState(0)
-
+  const {isAuth,isLoading} = useAppSelector(state => state.userReducer)
+  const dispatch = useAppDispatch();
+  const handleLogout = () => {
+    dispatch(logoutAndRemoveToken())
+  }
+  useEffect(() => {
+    dispatch(check())
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+      <Layout style={{ minHeight: "100vh" }}>
+        {isAuth && <Sider>
+            <NavigationBar />
+          </Sider>}
+          {isLoading ? <Loader/> : <Content>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route
+              path="/home"
+              element={
+                <ProtectedRoute role="ADMIN">
+                  <HomePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/statistic"
+              element={
+                <ProtectedRoute role="ADMIN">
+                  <StatisticPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/all"
+              element={
+                <ProtectedRoute role="ADMIN">
+                  <AllProductsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/create"
+              element={
+                <ProtectedRoute role="ADMIN">
+                  <CreateProductPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="*" element={<Navigate to="/login" />} />
+            <Route
+              path="/exit"
+              action={() => {
+                handleLogout()
+              }}
+              element={null}
+            />
+          </Routes>
+        </Content>}
+        
+      </Layout>
+  );
 }
 
-export default App
+export default App;
