@@ -5,12 +5,17 @@ interface TypeState {
   brands: IBrand[];
   isLoading: boolean;
   error: string | unknown;
+  brand:IBrand
 }
 
 const initialState: TypeState = {
   brands: [],
   isLoading: false,
   error: "",
+  brand:{
+    id:null,
+    name:'',
+  }
 };
 
 export const brandSlice = createSlice({
@@ -24,6 +29,10 @@ export const brandSlice = createSlice({
       state.isLoading = false;
       state.error = '';
       state.brands = actions.payload
+    },
+    createBrand(state,action) {
+      state.isLoading = false
+      state.brand = action.payload
     },
     brandFetchingError(state, actions:PayloadAction<string | unknown>) {
       state.isLoading = false;

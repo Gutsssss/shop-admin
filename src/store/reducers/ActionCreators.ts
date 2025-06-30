@@ -39,6 +39,26 @@ export const fetchBrands = () => async (dispatch:AppDispatch) =>{
         dispatch(brandFetchingError(err))
     }
 }
+export const createBrand = (name:string) => async (dispatch:AppDispatch) => {
+    dispatch(brandFetching())
+    try {
+       const response =  await $authHost.post('api/brand',{name:name})
+       dispatch(createBrand(response.data))
+       return response.data
+    }
+    catch(err) {
+        dispatch(brandFetchingError(err))
+    }
+}
+export const createType = async (name:string) => async (dispatch:AppDispatch) => {
+    dispatch(typeFetching())
+    try {
+        await $authHost.post('api/type',{name})
+    }
+    catch(err) {
+        dispatch(brandFetchingError(err))
+    }
+}
 export const login = (email: string, password: string) => async (dispatch: AppDispatch) => {
   try {
     dispatch(userFetching());
