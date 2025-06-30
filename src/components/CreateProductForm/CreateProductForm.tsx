@@ -1,6 +1,6 @@
 import { UploadOutlined } from "@ant-design/icons";
 import { Button, Form, Input, message, Select, Upload } from "antd";
-import { useCallback, useEffect, useState, type FC } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { UploadProps as uploadProps } from "antd";
 import { useAppDispatch, useAppSelector } from "@hooks/redux";
 import { createProductOnApi, fetchBrands, fetchTypes } from "@store/reducers/ActionCreators";
@@ -16,7 +16,7 @@ const initialField:IShopItem = {
 }
 
 const { TextArea } = Input;
-export const CreateProductForm: FC = () => {
+export const CreateProductForm = () => {
   const [productData, setProductData] = useState(initialField);
   const setStateValue = (values:object) =>
     setProductData((prev) => ({ ...prev, ...values }));

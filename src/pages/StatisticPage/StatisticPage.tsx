@@ -1,8 +1,7 @@
-import type { FC } from "react";
 import DynamicSlotCard from "@components/DynamicSlotCard/DynamicSlotCard";
 import CertainBrandPie from "@components/StatisticComponents/CertainBrandPie";
 import CertainBrandColumn from "@components/StatisticComponents/CertainBrandColumn";
-const StatisticPage: FC = () => {
+const StatisticPage = () => {
     return (
         <div>
             <DynamicSlotCard titleCard="Certain Brand" children={<CertainBrandPie/>}/>

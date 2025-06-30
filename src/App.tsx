@@ -2,7 +2,6 @@ import NavigationBar from "./layout/Navigation/NavigationBar";
 import { Layout } from "antd";
 import HomePage from "@pages/HomePage/HomePage";
 import {
-  BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
@@ -12,21 +11,27 @@ import LoginPage from "@pages/LoginPage/LoginPage";
 import AllProductsPage from "@pages/ProductsPages/AllProductsPage/AllProductsPage";
 import { CreateProductPage } from "@pages/ProductsPages/CreateProductPage/CreateProductPage";
 import { ProtectedRoute } from "@components/ProtectedRoute/ProtectedRoute";
-import { useAppDispatch } from "@hooks/redux";
-import { logoutAndRemoveToken } from "@store/reducers/ActionCreators";
+import { useAppDispatch, useAppSelector } from "@hooks/redux";
+import { check, logoutAndRemoveToken } from "@store/reducers/ActionCreators";
+import { useEffect } from "react";
+import { Loader } from "@components/Loader/Loader";
 const { Content, Sider } = Layout;
 function App() {
+  const {isAuth,isLoading} = useAppSelector(state => state.userReducer)
   const dispatch = useAppDispatch();
   const handleLogout = () => {
     dispatch(logoutAndRemoveToken())
   }
+  useEffect(() => {
+    dispatch(check())
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
   return (
-    <Router>
       <Layout style={{ minHeight: "100vh" }}>
-          <Sider>
+        {isAuth && <Sider>
             <NavigationBar />
-          </Sider>
-        <Content>
+          </Sider>}
+          {isLoading ? <Loader/> : <Content>
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route
@@ -70,9 +75,9 @@ function App() {
               element={null}
             />
           </Routes>
-        </Content>
+        </Content>}
+        
       </Layout>
-    </Router>
   );
 }
 

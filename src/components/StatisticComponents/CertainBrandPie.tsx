@@ -1,5 +1,5 @@
 import {Pie} from '@ant-design/charts'
-import { Loader } from '@components/LoadingComp/LoadingComp';
+import { Loader } from '@components/Loader/Loader';
 import { useAppDispatch,useAppSelector } from '@hooks/redux';
 import { fetchBrands, fetchItems } from '@store/reducers/ActionCreators';
 import { useEffect } from 'react';
