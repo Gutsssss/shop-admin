@@ -1,8 +1,8 @@
 import { AxiosError } from "axios";
 import type { AppDispatch } from "../store";
 import {itemsFetching,itemsFetchingSuccess,itemsFetchingError,getOneItem} from './ItemSlice'
-import { typeFetching,typeFetchingSuccess,typeFetchingError } from "./typeSlice";
-import { brandFetching,brandFetchingSuccess,brandFetchingError } from "./brandSlice";
+import { typeFetching,typeFetchingSuccess,typeFetchingError,createType} from "./typeSlice";
+import { brandFetching,brandFetchingSuccess,brandFetchingError,createBrand } from "./brandSlice";
 import { jwtDecode } from "jwt-decode";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -39,7 +39,7 @@ export const fetchBrands = () => async (dispatch:AppDispatch) =>{
         dispatch(brandFetchingError(err))
     }
 }
-export const createBrand = (name:string) => async (dispatch:AppDispatch) => {
+export const createBrandOnApi = (name:string) => async (dispatch:AppDispatch) => {
     dispatch(brandFetching())
     try {
        const response =  await $authHost.post('api/brand',{name:name})
@@ -50,10 +50,12 @@ export const createBrand = (name:string) => async (dispatch:AppDispatch) => {
         dispatch(brandFetchingError(err))
     }
 }
-export const createType = async (name:string) => async (dispatch:AppDispatch) => {
-    dispatch(typeFetching())
+export const createTypeOnApi = (name:string) => async (dispatch:AppDispatch) => {
+    dispatch(brandFetching())
     try {
-        await $authHost.post('api/type',{name})
+       const response =  await $authHost.post('api/type',{name:name})
+       dispatch(createType(response.data))
+       return response.data
     }
     catch(err) {
         dispatch(brandFetchingError(err))
