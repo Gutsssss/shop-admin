@@ -14,6 +14,7 @@ import { CreateProductPage } from "@pages/ProductsPages/CreateProductPage/Create
 import { ProtectedRoute } from "@components/ProtectedRoute/ProtectedRoute";
 import { useAppDispatch } from "@hooks/redux";
 import { logoutAndRemoveToken } from "@store/reducers/ActionCreators";
+import { EditPage } from "@pages/ProductsPages/EditPage/EditPage";
 const { Content, Sider } = Layout;
 function App() {
   const dispatch = useAppDispatch();
@@ -58,6 +59,14 @@ function App() {
               element={
                 <ProtectedRoute role="ADMIN">
                   <CreateProductPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/edit/:id"
+              element={
+                <ProtectedRoute role="ADMIN">
+                  <EditPage />
                 </ProtectedRoute>
               }
             />

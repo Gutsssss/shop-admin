@@ -1,6 +1,6 @@
 import { UploadOutlined } from "@ant-design/icons";
 import { Button, Form, Input, message, Select, Upload } from "antd";
-import { useCallback, useEffect, useState, type FC } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { UploadProps as uploadProps } from "antd";
 import { useAppDispatch, useAppSelector } from "@hooks/redux";
 import { createProductOnApi, fetchBrands, fetchTypes } from "@store/reducers/ActionCreators";
@@ -14,16 +14,18 @@ const initialField:IShopItem = {
     img:null,
     info: "",
 }
-
+interface FormProps {
+  currentProduct?:IShopItem | false
+  key?:string | number
+}
 const { TextArea } = Input;
-export const CreateProductForm: FC = () => {
-  const [productData, setProductData] = useState(initialField);
+export const CreateProductForm = ({currentProduct,key}:FormProps) => {
+  const [productData, setProductData] = useState(currentProduct ? currentProduct : initialField);
   const setStateValue = (values:object) =>
     setProductData((prev) => ({ ...prev, ...values }));
   
   const changeType = useCallback((selectedId: string | number) => setStateValue({typeId:selectedId}),[])
   const changeBrand = useCallback((selectedId: string | number) => setStateValue({brandId:selectedId}),[])
-
   const handleUpload: uploadProps["onChange"] = (info) => {
     setStateValue({img:info.file})
   };
@@ -61,7 +63,7 @@ export const CreateProductForm: FC = () => {
   }
   return (
     <div>
-      <Form style={{ margin: 20 }} form={form} layout="vertical" size="large">
+      <Form key={key} style={{ margin: 20 }} form={form} layout="vertical" size="large">
         <Form.Item label="Name" required>
           <Input
             value={productData.name}

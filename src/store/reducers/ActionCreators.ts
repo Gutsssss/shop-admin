@@ -120,6 +120,18 @@ export const deleteProductFromApi = (id:number | undefined) => async (dispatch: 
         dispatch(itemsFetchingError(err))
     }
 }
+export const getOneProductFromApi = (id:number) => async (dispatch:AppDispatch) => {
+        
+    try {
+        dispatch(fetchItems())
+        const response = await $host.get(`api/shopitem/${id}`)
+        dispatch(getOneItem(response.data))
+        return response.data
+    }
+    catch(err) {
+        console.log(err)
+    }
+}
 export const createProductOnApi = async(product:IShopItem) => async (dispatch:AppDispatch) => {
     try {
         dispatch(itemsFetching())
