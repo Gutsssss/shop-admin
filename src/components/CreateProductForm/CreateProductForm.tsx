@@ -16,10 +16,10 @@ const initialField:IShopItem = {
 }
 interface FormProps {
   currentProduct?:IShopItem | false
-  key?:string | number
+  keyForm:string | number
 }
 const { TextArea } = Input;
-export const CreateProductForm = ({currentProduct,key}:FormProps) => {
+export const CreateProductForm = ({currentProduct,keyForm}:FormProps,) => {
   const [productData, setProductData] = useState(currentProduct ? currentProduct : initialField);
   const setStateValue = (values:object) =>
     setProductData((prev) => ({ ...prev, ...values }));
@@ -63,7 +63,7 @@ export const CreateProductForm = ({currentProduct,key}:FormProps) => {
   }
   return (
     <div>
-      <Form key={key} style={{ margin: 20 }} form={form} layout="vertical" size="large">
+      <Form key={keyForm} style={{ margin: 20 }} form={form} layout="vertical" size="large">
         <Form.Item label="Name" required>
           <Input
             value={productData.name}

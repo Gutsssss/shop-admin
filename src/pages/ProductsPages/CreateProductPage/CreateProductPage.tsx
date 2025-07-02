@@ -22,7 +22,7 @@ export const CreateProductPage = () => {
   }
   return (
     <div>
-      <CreateProductForm currentProduct={false} key={1}/>
+      <CreateProductForm currentProduct={false} keyForm={1}/>
       <Divider orientation="left">Brand</Divider>
       <CreateForm label="Создание бренда" createFunc={(name) => handleCreate(name,'brand')}/>
         <Divider orientation="left">Type</Divider>

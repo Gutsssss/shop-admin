@@ -19,14 +19,23 @@ const { Content, Sider } = Layout;
 function App() {
   const dispatch = useAppDispatch();
   const handleLogout = () => {
-    dispatch(logoutAndRemoveToken())
-  }
+    dispatch(logoutAndRemoveToken());
+  };
   return (
     <Router>
       <Layout style={{ minHeight: "100vh" }}>
-          <Sider>
-            <NavigationBar />
-          </Sider>
+        <Sider
+          style={{
+            overflow: "auto",
+            height: "100vh",
+            position: "sticky",
+            insetInlineStart: 0,
+            top: 0,
+            bottom: 0,
+          }}
+        >
+          <NavigationBar />
+        </Sider>
         <Content>
           <Routes>
             <Route path="/login" element={<LoginPage />} />
@@ -74,7 +83,7 @@ function App() {
             <Route
               path="/exit"
               action={() => {
-                handleLogout()
+                handleLogout();
               }}
               element={null}
             />

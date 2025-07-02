@@ -21,10 +21,10 @@ export const EditPage = () => {
     }, [id, dispatch])
   return (
     <div>
-      {isLoading || (item && item.id !== Number(id)) ? (
+      {isLoading || (item !== null && item?.id !== Number(id)) ? (
         <Loader />
       ) : (
-        <CreateProductForm currentProduct={item!} key={id} />
+        <CreateProductForm currentProduct={item!} keyForm={Number(id)!} />
       )}
     </div>
   );
