@@ -3,7 +3,7 @@ import { Button, Form, Input, message, Select, Upload } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import type { UploadProps as uploadProps } from "antd";
 import { useAppDispatch, useAppSelector } from "@hooks/redux";
-import { createProductOnApi, fetchBrands, fetchTypes } from "@store/reducers/ActionCreators";
+import { fetchBrands, fetchTypes } from "@store/reducers/ActionCreators";
 import type { IShopItem } from "@models/IShopItem";
 
 const initialField:IShopItem = {
@@ -17,9 +17,10 @@ const initialField:IShopItem = {
 interface FormProps {
   currentProduct?:IShopItem | false
   keyForm:string | number
+  createOrEdit:(product:IShopItem) => void
 }
 const { TextArea } = Input;
-export const CreateProductForm = ({currentProduct,keyForm}:FormProps,) => {
+export const CreateProductForm = ({currentProduct,keyForm,createOrEdit}:FormProps,) => {
   const [productData, setProductData] = useState(currentProduct ? currentProduct : initialField);
   const setStateValue = (values:object) =>
     setProductData((prev) => ({ ...prev, ...values }));
@@ -53,14 +54,7 @@ export const CreateProductForm = ({currentProduct,keyForm}:FormProps,) => {
     fileList: productData.img ? [productData.img] : [],
     maxCount: 1,
   };
-  const createProduct = async (product:IShopItem) => {
-    try {
-        dispatch(await createProductOnApi(product))
-    } catch (error) {
-      console.log(error)
-    }
-    
-  }
+  
   return (
     <div>
       <Form key={keyForm} style={{ margin: 20 }} form={form} layout="vertical" size="large">
@@ -126,7 +120,7 @@ export const CreateProductForm = ({currentProduct,keyForm}:FormProps,) => {
             <Button icon={<UploadOutlined />}>Click to Upload</Button>
           </Upload>
         </Form.Item>
-        <Button onClick={() => createProduct(productData)} type="primary">Создать</Button>
+        <Button onClick={() => createOrEdit(productData)} type="primary">Создать</Button>
       </Form>
     </div>
   );

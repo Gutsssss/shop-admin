@@ -1,7 +1,8 @@
 import { CreateForm } from "@components/CreateForm/CreateForm";
 import { CreateProductForm } from "@components/CreateProductForm/CreateProductForm";
 import { useAppDispatch } from "@hooks/redux";
-import { createBrandOnApi, createTypeOnApi } from "@store/reducers/ActionCreators";
+import type { IShopItem } from "@models/IShopItem";
+import { createBrandOnApi, createProductOnApi, createTypeOnApi } from "@store/reducers/ActionCreators";
 import { Divider } from "antd";
 
 export const CreateProductPage = () => {
@@ -20,9 +21,16 @@ export const CreateProductPage = () => {
         console.log(err)
       }
   }
+  const createProduct = async (product:IShopItem) => {
+    try {
+        dispatch(await createProductOnApi(product))
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <div>
-      <CreateProductForm currentProduct={false} keyForm={1}/>
+      <CreateProductForm currentProduct={false} keyForm={1} createOrEdit={(product) => createProduct(product)}/>
       <Divider orientation="left">Brand</Divider>
       <CreateForm label="Создание бренда" createFunc={(name) => handleCreate(name,'brand')}/>
         <Divider orientation="left">Type</Divider>

@@ -120,6 +120,18 @@ export const deleteProductFromApi = (id:number | undefined) => async (dispatch: 
         dispatch(itemsFetchingError(err))
     }
 }
+export const editProductFromApi = (product:IShopItem) => async (dispatch:AppDispatch) => {
+        dispatch(itemsFetching())
+    try {
+        await $authHost.post('api/shopitem/edit',product,{
+            headers:{
+                'Content-Type': 'multipart/form-data',
+            }
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
 export const getOneProductFromApi = (id:number) => async (dispatch:AppDispatch) => {
         
     try {
@@ -132,6 +144,7 @@ export const getOneProductFromApi = (id:number) => async (dispatch:AppDispatch) 
         console.log(err)
     }
 }
+
 export const createProductOnApi = async(product:IShopItem) => async (dispatch:AppDispatch) => {
     try {
         dispatch(itemsFetching())
