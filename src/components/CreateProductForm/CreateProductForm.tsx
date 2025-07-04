@@ -1,7 +1,6 @@
 import { UploadOutlined } from "@ant-design/icons";
 import { Button, Form, Input, message, Select, Upload } from "antd";
 import { useCallback, useEffect, useState } from "react";
-import { useCallback, useEffect, useState } from "react";
 import type { UploadProps as uploadProps } from "antd";
 import { useAppDispatch, useAppSelector } from "@hooks/redux";
 import { fetchBrands, fetchTypes } from "@store/reducers/ActionCreators";
