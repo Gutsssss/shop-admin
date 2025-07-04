@@ -3,7 +3,7 @@ import { Button, Form, Input, message, Select, Upload } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import type { UploadProps as uploadProps } from "antd";
 import { useAppDispatch, useAppSelector } from "@hooks/redux";
-import { createProductOnApi, fetchBrands, fetchTypes } from "@store/reducers/ActionCreators";
+import { fetchBrands, fetchTypes } from "@store/reducers/ActionCreators";
 import type { IShopItem } from "@models/IShopItem";
 
 const initialField:IShopItem = {
@@ -14,16 +14,19 @@ const initialField:IShopItem = {
     img:null,
     info: "",
 }
-
+interface FormProps {
+  currentProduct?:IShopItem
+  keyForm:string | number
+  onSubmit:(product:IShopItem) => void
+}
 const { TextArea } = Input;
-export const CreateProductForm = () => {
-  const [productData, setProductData] = useState(initialField);
+export const CreateProductForm = ({currentProduct,keyForm,onSubmit}:FormProps,) => {
+  const [productData, setProductData] = useState(currentProduct || initialField);
   const setStateValue = (values:object) =>
     setProductData((prev) => ({ ...prev, ...values }));
   
   const changeType = useCallback((selectedId: string | number) => setStateValue({typeId:selectedId}),[])
   const changeBrand = useCallback((selectedId: string | number) => setStateValue({brandId:selectedId}),[])
-
   const handleUpload: uploadProps["onChange"] = (info) => {
     setStateValue({img:info.file})
   };
@@ -51,17 +54,10 @@ export const CreateProductForm = () => {
     fileList: productData.img ? [productData.img] : [],
     maxCount: 1,
   };
-  const createProduct = async (product:IShopItem) => {
-    try {
-        dispatch(await createProductOnApi(product))
-    } catch (error) {
-      console.log(error)
-    }
-    
-  }
+  
   return (
     <div>
-      <Form style={{ margin: 20 }} form={form} layout="vertical" size="large">
+      <Form key={keyForm} style={{ margin: 20 }} form={form} layout="vertical" size="large">
         <Form.Item label="Name" required>
           <Input
             value={productData.name}
@@ -124,7 +120,7 @@ export const CreateProductForm = () => {
             <Button icon={<UploadOutlined />}>Click to Upload</Button>
           </Upload>
         </Form.Item>
-        <Button onClick={() => createProduct(productData)} type="primary">Создать</Button>
+        <Button onClick={() => onSubmit(productData)} type="primary">Создать</Button>
       </Form>
     </div>
   );

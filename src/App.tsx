@@ -11,27 +11,31 @@ import LoginPage from "@pages/LoginPage/LoginPage";
 import AllProductsPage from "@pages/ProductsPages/AllProductsPage/AllProductsPage";
 import { CreateProductPage } from "@pages/ProductsPages/CreateProductPage/CreateProductPage";
 import { ProtectedRoute } from "@components/ProtectedRoute/ProtectedRoute";
-import { useAppDispatch, useAppSelector } from "@hooks/redux";
-import { check, logoutAndRemoveToken } from "@store/reducers/ActionCreators";
-import { useEffect } from "react";
-import { Loader } from "@components/Loader/Loader";
+import { useAppDispatch } from "@hooks/redux";
+import { logoutAndRemoveToken } from "@store/reducers/ActionCreators";
+import { EditPage } from "@pages/ProductsPages/EditProductPage/EditProductPage";
 const { Content, Sider } = Layout;
 function App() {
-  const {isAuth,isLoading} = useAppSelector(state => state.userReducer)
+  // const {isAuth,isLoading} = useAppSelector(state => state.userReducer)
   const dispatch = useAppDispatch();
   const handleLogout = () => {
-    dispatch(logoutAndRemoveToken())
-  }
-  useEffect(() => {
-    dispatch(check())
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+    dispatch(logoutAndRemoveToken());
+  };
   return (
       <Layout style={{ minHeight: "100vh" }}>
-        {isAuth && <Sider>
-            <NavigationBar />
-          </Sider>}
-          {isLoading ? <Loader/> : <Content>
+        <Sider
+          style={{
+            overflow: "auto",
+            height: "100vh",
+            position: "sticky",
+            insetInlineStart: 0,
+            top: 0,
+            bottom: 0,
+          }}
+        >
+          <NavigationBar />
+        </Sider>
+        <Content>
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route
@@ -66,16 +70,24 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/edit/:id"
+              element={
+                <ProtectedRoute role="ADMIN">
+                  <EditPage />
+                </ProtectedRoute>
+              }
+            />
             <Route path="*" element={<Navigate to="/login" />} />
             <Route
               path="/exit"
               action={() => {
-                handleLogout()
+                handleLogout();
               }}
               element={null}
             />
           </Routes>
-        </Content>}
+        </Content>
         
       </Layout>
   );

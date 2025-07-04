@@ -17,7 +17,7 @@ export const routes: MenuItem[] = [
     children: [
       { key: '/all', label: 'All products' },
       { key: '/create', label: 'Create product' },
-      { key: '/edit/:id', label: 'Edit product' }
+      // { key: '/edit/:id', label: 'Edit product' }
     ]
   },
   {

@@ -4,6 +4,7 @@ import { type IShopItem } from "../../models/IShopItem";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useAppDispatch } from "@hooks/redux";
 import { deleteProductFromApi } from "@store/reducers/ActionCreators";
+import { Link } from "react-router-dom";
 
 type ItemCardProps = IShopItem & {messageText:string}
 
@@ -38,7 +39,7 @@ export const ItemCard = ({name,price,rating,id,img,messageText}:ItemCardProps) =
         style={{ width: 300,margin:10 }}
         cover={<img loading="lazy" style={{maxHeight:300,objectFit:'cover'}} alt="example" src={`${import.meta.env.VITE_APP_API_URL}${img}`} />}
         actions={[
-      <EditOutlined key="edit" />,
+            <Link to={`/edit/${id}`}><EditOutlined key="edit" /></Link>,
       <DeleteOutlined onClick={() => deleteProduct(id!)} style={{color:'red'}} key="delete" />
     ]}
         >

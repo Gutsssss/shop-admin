@@ -1,8 +1,8 @@
 import { AxiosError } from "axios";
 import type { AppDispatch } from "../store";
 import {itemsFetching,itemsFetchingSuccess,itemsFetchingError,getOneItem} from './ItemSlice'
-import { typeFetching,typeFetchingSuccess,typeFetchingError } from "./typeSlice";
-import { brandFetching,brandFetchingSuccess,brandFetchingError } from "./brandSlice";
+import { typeFetching,typeFetchingSuccess,typeFetchingError,createType} from "./typeSlice";
+import { brandFetching,brandFetchingSuccess,brandFetchingError,createBrand } from "./brandSlice";
 import { jwtDecode } from "jwt-decode";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -34,6 +34,28 @@ export const fetchBrands = () => async (dispatch:AppDispatch) =>{
         dispatch(brandFetching())
         const response = await $host.get('api/brand')
         dispatch(brandFetchingSuccess(response.data))
+    }
+    catch(err) {
+        dispatch(brandFetchingError(err))
+    }
+}
+export const createBrandOnApi = (name:string) => async (dispatch:AppDispatch) => {
+    dispatch(brandFetching())
+    try {
+       const response =  await $authHost.post('api/brand',{name:name})
+       dispatch(createBrand(response.data))
+       return response.data
+    }
+    catch(err) {
+        dispatch(brandFetchingError(err))
+    }
+}
+export const createTypeOnApi = (name:string) => async (dispatch:AppDispatch) => {
+    dispatch(brandFetching())
+    try {
+       const response =  await $authHost.post('api/type',{name:name})
+       dispatch(createType(response.data))
+       return response.data
     }
     catch(err) {
         dispatch(brandFetchingError(err))
@@ -98,6 +120,31 @@ export const deleteProductFromApi = (id:number | undefined) => async (dispatch: 
         dispatch(itemsFetchingError(err))
     }
 }
+export const editProductFromApi = (product:IShopItem) => async (dispatch:AppDispatch) => {
+        dispatch(itemsFetching())
+    try {
+        await $authHost.post('api/shopitem/edit',product,{
+            headers:{
+                'Content-Type': 'multipart/form-data',
+            }
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+export const getOneProductFromApi = (id:number) => async (dispatch:AppDispatch) => {
+        
+    try {
+        dispatch(fetchItems())
+        const response = await $host.get(`api/shopitem/${id}`)
+        dispatch(getOneItem(response.data))
+        return response.data
+    }
+    catch(err) {
+        console.log(err)
+    }
+}
+
 export const createProductOnApi = async(product:IShopItem) => async (dispatch:AppDispatch) => {
     try {
         dispatch(itemsFetching())

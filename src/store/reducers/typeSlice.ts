@@ -1,3 +1,4 @@
+
 import type { Itype } from '@models/IType';
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
@@ -5,12 +6,17 @@ interface TypeState {
   types: Itype[];
   isLoading: boolean;
   error: string | unknown;
+  type:Itype
 }
 
 const initialState: TypeState = {
   types: [],
   isLoading: false,
   error: "",
+  type:{
+    id:null,
+    name:''
+  }
 };
 
 export const typeSlice = createSlice({
@@ -25,6 +31,10 @@ export const typeSlice = createSlice({
       state.error = '';
       state.types = actions.payload
     },
+    createType(state,action) {
+      state.isLoading = false
+      state.type = action.payload
+    },
     typeFetchingError(state, actions:PayloadAction<string | unknown>) {
       state.isLoading = false;
       state.error = actions.payload
@@ -32,5 +42,5 @@ export const typeSlice = createSlice({
   },
 });
 
-export const {typeFetching,typeFetchingSuccess,typeFetchingError} = typeSlice.actions;
+export const {typeFetching,typeFetchingSuccess,typeFetchingError,createType} = typeSlice.actions;
 export const typeReducer = typeSlice.reducer;
