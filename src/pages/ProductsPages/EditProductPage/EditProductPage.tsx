@@ -1,5 +1,5 @@
 import { CreateProductForm } from "@components/CreateProductForm/CreateProductForm";
-import { Loader } from "@components/LoadingComp/LoadingComp";
+import { Loader } from "@components/Loader/Loader";
 import { useAppDispatch, useAppSelector } from "@hooks/redux";
 import type { IShopItem } from "@models/IShopItem";
 import { editProductFromApi, getOneProductFromApi } from "@store/reducers/ActionCreators";
