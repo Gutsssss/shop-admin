@@ -12,6 +12,7 @@ const NavigationBar = () => {
     if(info.key === '/exit') {
       dispatch(logoutAndRemoveToken())
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[navigate]);
   return (
     <Menu

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@hooks/redux";
 import { searchProducts } from "@store/reducers/ActionCreators";
-import { Loader } from "@components/LoadingComp/LoadingComp";
+import { Loader } from "@components/Loader/Loader";
 import { ItemCard } from "@components/ItemCard/ItemCard";
 import { MyInput } from "@components/MyInput/MyInput";
 import style from './AllProductsPage.module.css'
