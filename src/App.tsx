@@ -2,7 +2,6 @@ import NavigationBar from "./layout/Navigation/NavigationBar";
 import { Layout } from "antd";
 import HomePage from "@pages/HomePage/HomePage";
 import {
-  BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
@@ -17,12 +16,12 @@ import { logoutAndRemoveToken } from "@store/reducers/ActionCreators";
 import { EditPage } from "@pages/ProductsPages/EditProductPage/EditProductPage";
 const { Content, Sider } = Layout;
 function App() {
+  // const {isAuth,isLoading} = useAppSelector(state => state.userReducer)
   const dispatch = useAppDispatch();
   const handleLogout = () => {
     dispatch(logoutAndRemoveToken());
   };
   return (
-    <Router>
       <Layout style={{ minHeight: "100vh" }}>
         <Sider
           style={{
@@ -89,8 +88,8 @@ function App() {
             />
           </Routes>
         </Content>
+        
       </Layout>
-    </Router>
   );
 }
 

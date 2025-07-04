@@ -1,8 +1,8 @@
 import { Navigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '@hooks/redux';
-import { useEffect, type JSX } from 'react';
-import { check } from '@store/reducers/ActionCreators';
-import { Loader } from '@components/LoadingComp/LoadingComp';
+import { useAppSelector } from '@hooks/redux';
+import { type JSX } from 'react';
+
+import { Loader } from '@components/Loader/Loader';
 
 export const ProtectedRoute = ({ 
   children,
@@ -12,17 +12,6 @@ export const ProtectedRoute = ({
   role?: string;
 }) => {
   const { user, isAuth,isLoading } = useAppSelector(state => state.userReducer);
-  const dispatch = useAppDispatch()
-  useEffect(() => {
-  const checkAuth = () => {
-    try {
-      dispatch(check());
-    } catch (err) {
-      console.log(err)
-    }
-  };
-  checkAuth();
-}, [dispatch]);
   if (isLoading) return <Loader />;
   if (!isAuth || user?.role !== role) {
     return <Navigate to="/login" replace />;
