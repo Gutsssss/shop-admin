@@ -5,17 +5,18 @@ import type { IShopItem } from "@models/IShopItem";
 import { createBrandOnApi, createProductOnApi, createTypeOnApi } from "@store/reducers/ActionCreators";
 import { Divider } from "antd";
 
+const actionsByType =   {
+    brand: (name:string) => createBrandOnApi(name),
+    type: (name:string) => createTypeOnApi(name),
+ }
+
 export const CreateProductPage = () => {
   const dispatch = useAppDispatch()
   const handleCreate = (name:string,dataType:string) => {
       try {
-        if(dataType === 'brand') {
-          dispatch(createBrandOnApi(name))
-        }
-        if(dataType === 'type') {
-          dispatch(createTypeOnApi(name))
-        }
-        
+        if (Object.keys(actionsByType).includes(dataType)) {
+        dispatch(actionsByType[dataType](name))
+}
       }
       catch(err) {
         console.log(err)
@@ -30,7 +31,7 @@ export const CreateProductPage = () => {
   }
   return (
     <div>
-      <CreateProductForm currentProduct={false} keyForm={1} createOrEdit={(product) => createProduct(product)}/>
+      <CreateProductForm keyForm={`createForm`} onSubmit={createProduct}/>
       <Divider orientation="left">Brand</Divider>
       <CreateForm label="Создание бренда" createFunc={(name) => handleCreate(name,'brand')}/>
         <Divider orientation="left">Type</Divider>

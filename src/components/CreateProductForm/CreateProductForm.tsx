@@ -15,13 +15,13 @@ const initialField:IShopItem = {
     info: "",
 }
 interface FormProps {
-  currentProduct?:IShopItem | false
+  currentProduct?:IShopItem
   keyForm:string | number
-  createOrEdit:(product:IShopItem) => void
+  onSubmit:(product:IShopItem) => void
 }
 const { TextArea } = Input;
-export const CreateProductForm = ({currentProduct,keyForm,createOrEdit}:FormProps,) => {
-  const [productData, setProductData] = useState(currentProduct ? currentProduct : initialField);
+export const CreateProductForm = ({currentProduct,keyForm,onSubmit}:FormProps,) => {
+  const [productData, setProductData] = useState(currentProduct || initialField);
   const setStateValue = (values:object) =>
     setProductData((prev) => ({ ...prev, ...values }));
   
@@ -120,7 +120,7 @@ export const CreateProductForm = ({currentProduct,keyForm,createOrEdit}:FormProp
             <Button icon={<UploadOutlined />}>Click to Upload</Button>
           </Upload>
         </Form.Item>
-        <Button onClick={() => createOrEdit(productData)} type="primary">Создать</Button>
+        <Button onClick={() => onSubmit(productData)} type="primary">Создать</Button>
       </Form>
     </div>
   );

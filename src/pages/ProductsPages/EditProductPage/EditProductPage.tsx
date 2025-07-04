@@ -9,8 +9,7 @@ export const EditPage = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const { item, isLoading } = useAppSelector((state) => state.itemReducer);
-  useEffect(() => {
-        const fetchProduct = async () => {
+  const fetchProduct = async () => {
             try {
                 await dispatch(getOneProductFromApi(Number(id)))
               
@@ -18,8 +17,9 @@ export const EditPage = () => {
                 console.log(error)
             }
         }
-        
+  useEffect(() => {
         fetchProduct()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id, dispatch])
     if (isLoading || !item || item.id !== Number(id)) {
     return <Loader />;
@@ -33,7 +33,7 @@ export const EditPage = () => {
     }
   return (
     <div>
-      <CreateProductForm currentProduct={item!} keyForm={Number(id)} createOrEdit={(product) => editProduct(product)} />
+      <CreateProductForm currentProduct={item!} keyForm={Number(id)} onSubmit={editProduct} />
     </div>
   );
 };
