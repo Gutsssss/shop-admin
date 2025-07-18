@@ -37,7 +37,7 @@ const CertainBrandPie = () => {
     if (!brands) return [];
     return brands.map((elem: IBrand) => ({
       type: elem.name,
-      value: filterBrands(elem.id)
+      value: filterBrands(elem.id as number)
     }));
   };
 
