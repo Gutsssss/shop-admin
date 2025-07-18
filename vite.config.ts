@@ -1,9 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
-import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
-import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
-import rollupNodePolyFill from 'rollup-plugin-node-polyfills'
+import inject from '@rollup/plugin-inject'
 
 export default defineConfig({
   plugins: [react()],
@@ -20,31 +18,21 @@ export default defineConfig({
       { find: '@', replacement: resolve(__dirname, './src') }
     ],
   },
-  optimizeDeps: {
-    esbuildOptions: {
-      define: {
-        global: 'globalThis',
-      },
-      plugins: [
-        NodeGlobalsPolyfillPlugin({
-          process: true,
-          buffer: true,
-        }),
-        NodeModulesPolyfillPlugin()
-      ],
-    },
-  },
   build: {
     rollupOptions: {
       plugins: [
-        rollupNodePolyFill()
-      ],
-      external: [
-        'crypto'
+        inject({
+          process: 'process/browser',
+          Buffer: ['buffer', 'Buffer'],
+        })
       ]
-    },
-    commonjsOptions: {
-      transformMixedEsModules: true,
+    }
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      define: {
+        global: 'globalThis'
+      }
     }
   }
 })
