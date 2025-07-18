@@ -11,9 +11,12 @@ RUN apt-get update && apt-get install -y \
 COPY package*.json ./
 RUN npm install --force
 
-RUN echo "import { webcrypto } from 'crypto'; globalThis.crypto = webcrypto;" > src/crypto-polyfill.ts
+RUN mkdir -p src && \
+    echo "import { webcrypto } from 'crypto'; globalThis.crypto = webcrypto;" > src/crypto-polyfill.ts
+
 COPY . .
-RUN echo "import './crypto-polyfill';" | cat - src/main.tsx > temp && mv temp src/main.tsx
+
+RUN sed -i '1i import "./crypto-polyfill";' src/main.tsx
 
 RUN npm run build
 
