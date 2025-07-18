@@ -64,7 +64,7 @@ export const createTypeOnApi = (name:string) => async (dispatch:AppDispatch) => 
 export const login = (email: string, password: string) => async (dispatch: AppDispatch) => {
   try {
     dispatch(userFetching());
-    const { data } = await $host.post('api/user/login', { email, password });
+    const { data } = await $host.post('/user/login', { email, password });
     
     const decodedUser = jwtDecode(data.token);
     localStorage.setItem('token', data.token);
