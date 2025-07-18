@@ -14,16 +14,16 @@ const actionsByType: Record<ActionType, (name: string) => ReturnType<typeof crea
 
 export const CreateProductPage = () => {
   const dispatch = useAppDispatch()
-  const handleCreate = (name:string,dataType:string) => {
-      try {
-        if (Object.keys(actionsByType).includes(dataType)) {
-        dispatch(actionsByType[dataType](name))
-}
-      }
-      catch(err) {
-        console.log(err)
-      }
+  const handleCreate = (name: string, dataType: ActionType) => {
+  try {
+    const actionCreator = actionsByType[dataType]; // Безопасный доступ
+    if (actionCreator) {
+      dispatch(actionCreator(name));
+    }
+  } catch (err) {
+    console.error("Error creating item:", err);
   }
+};
   const createProduct = async (product:IShopItem) => {
     try {
         dispatch(await createProductOnApi(product))
