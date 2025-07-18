@@ -1,17 +1,29 @@
 import { Column } from '@ant-design/plots';
 
+interface DataItem {
+  letter: string;
+  frequency: number;
+}
+
+interface ChartInstance {
+  getContainer: () => HTMLElement;
+  on: (event: string, callback: () => void, once?: boolean) => void;
+  emit: (event: string, params: { data: { data: DataItem }; offsetY: number }) => void;
+}
+
 const DemoDefaultTooltip = () => {
-  const data = [
+  const data: DataItem[] = [
     { letter: 'A', frequency: 8167 },
     { letter: 'B', frequency: 1492 },
   ];
+
   const config = {
     data,
     xField: 'letter',
     yField: 'frequency',
-    onReady: ({ chart }) => {
+    onReady: ({ chart }: { chart: ChartInstance }) => {
       try {
-        const { height } = chart._container.getBoundingClientRect();
+        const { height } = chart.getContainer().getBoundingClientRect();
         const tooltipItem = data[Math.floor(Math.random() * data.length)];
         chart.on(
           'afterrender',
@@ -30,6 +42,8 @@ const DemoDefaultTooltip = () => {
       }
     },
   };
+
   return <Column {...config} />;
 };
-export default DemoDefaultTooltip
+
+export default DemoDefaultTooltip;

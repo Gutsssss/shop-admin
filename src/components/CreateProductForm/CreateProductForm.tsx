@@ -21,15 +21,7 @@ interface FormProps {
 }
 const { TextArea } = Input;
 export const CreateProductForm = ({currentProduct,keyForm,onSubmit}:FormProps,) => {
-  const [productData, setProductData] = useState<IShopItem>(() => {
-        if (currentProduct) {
-            return {
-                ...currentProduct,
-                info: currentProduct.info?.length ? currentProduct.info : [{ id: '', fullDescription: '' }]
-            };
-        }
-        return initialField;
-    });
+  const [productData, setProductData] = useState<IShopItem>(currentProduct || initialField);
   const setStateValue = (values:object) =>
     setProductData((prev) => ({ ...prev, ...values }));
   

@@ -1,39 +1,57 @@
-import {Pie} from '@ant-design/charts'
+import { Pie } from '@ant-design/charts';
 import { Loader } from '@components/Loader/Loader';
-import { useAppDispatch,useAppSelector } from '@hooks/redux';
+import { useAppDispatch, useAppSelector } from '@hooks/redux';
 import { fetchBrands, fetchItems } from '@store/reducers/ActionCreators';
 import { useEffect } from 'react';
 import { configPie } from '../../Static/baseConfigPie';
+import type { IBrand } from '@models/IBrand';
+
+interface Product {
+  brandId: number | string;
+  [key: string]: any;
+}
+
+interface PieDataItem {
+  type: string;
+  value: number;
+}
+
 const CertainBrandPie = () => {
-    const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   const { brands } = useAppSelector((state) => state.brandReducer);
-  const {items,isLoading} = useAppSelector((state) => state.itemReducer)
+  const { items, isLoading } = useAppSelector((state) => state.itemReducer);
+
   useEffect(() => {
-      dispatch(fetchItems());
-      dispatch(fetchBrands())
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-    if (isLoading) {
-      return <Loader />;
-    }
-  const filterBrands = (brandId:number) => {
-    const productWithBrand = items.filter(prod => prod.brandId === brandId)
-    return productWithBrand.length
-  }
-  const modifyData = () => {
-    return brands.map(elem => ({
-      type:elem.name,
-      quantity:filterBrands(elem.id)
-    }))
-  }
-    const data = modifyData()
-    const config = {
+    dispatch(fetchItems());
+    dispatch(fetchBrands());
+  }, [dispatch]);
+
+  const filterBrands = (brandId: number): number => {
+    if (!items) return 0;
+    return items.filter((prod: Product) => 
+      Number(prod.brandId) === brandId
+    ).length;
+  };
+
+  const modifyData = (): PieDataItem[] => {
+    if (!brands) return [];
+    return brands.map((elem: IBrand) => ({
+      type: elem.name,
+      value: filterBrands(elem.id)
+    }));
+  };
+
+  const data = modifyData();
+  const config = {
     data,
     ...configPie
   };
-    return (
-        <Pie {...config}/>
-    )
-}
 
-export default CertainBrandPie
+  if (isLoading || !data.length) {
+    return <Loader />;
+  }
+
+  return <Pie {...config} />;
+};
+
+export default CertainBrandPie;

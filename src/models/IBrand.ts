@@ -1,5 +1,5 @@
 export interface IBrand {
-    id:number | null,
+    id:number,
     name:string,
     createdAt?:Date | string,
     updatedAr?:Date | string,
