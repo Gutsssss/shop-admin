@@ -4,17 +4,17 @@ import { searchProducts } from "@store/reducers/ActionCreators";
 import { Loader } from "@components/Loader/Loader";
 import { ItemCard } from "@components/ItemCard/ItemCard";
 import { MyInput } from "@components/MyInput/MyInput";
-import style from './AllProductsPage.module.css'
+import style from "./AllProductsPage.module.css";
 import { NoData } from "@components/NoData/NoData";
 
 const AllProductsPage = () => {
   const dispatch = useAppDispatch();
   const { items, isLoading } = useAppSelector((state) => state.itemReducer);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
 
   useEffect(() => {
     const timerId = setTimeout(() => {
-      if (input.trim() !== '') {
+      if (input.trim() !== "") {
         dispatch(searchProducts(input));
       }
     }, 500);
@@ -24,7 +24,7 @@ const AllProductsPage = () => {
 
   const handleInputChange = (value: string) => {
     setInput(value);
-};
+  };
 
   if (isLoading) {
     return <Loader />;
@@ -32,8 +32,7 @@ const AllProductsPage = () => {
 
   return (
     <div>
-      
-      <MyInput input={input} onChangeInput={handleInputChange}/>
+      <MyInput input={input} onChangeInput={handleInputChange} />
       <div className={style.mainProducts}>
         {items?.length > 0 ? (
           items.map((item) => (
@@ -46,11 +45,12 @@ const AllProductsPage = () => {
               typeId={item.typeId}
               brandId={item.brandId}
               rating={item.rating}
+              messageText={""}
             />
           ))
         ) : (
           <div className={style.noResults}>
-            {input ? <NoData/> : 'Введите поисковый запрос'}
+            {input ? <NoData /> : "Введите поисковый запрос"}
           </div>
         )}
       </div>

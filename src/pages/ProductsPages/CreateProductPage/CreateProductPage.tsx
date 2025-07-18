@@ -5,10 +5,12 @@ import type { IShopItem } from "@models/IShopItem";
 import { createBrandOnApi, createProductOnApi, createTypeOnApi } from "@store/reducers/ActionCreators";
 import { Divider } from "antd";
 
-const actionsByType =   {
-    brand: (name:string) => createBrandOnApi(name),
-    type: (name:string) => createTypeOnApi(name),
- }
+type ActionType = 'brand' | 'type';
+
+const actionsByType: Record<ActionType, (name: string) => ReturnType<typeof createBrandOnApi>> = {
+  brand: (name: string) => createBrandOnApi(name),
+  type: (name: string) => createTypeOnApi(name),
+};
 
 export const CreateProductPage = () => {
   const dispatch = useAppDispatch()
