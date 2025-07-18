@@ -8,6 +8,10 @@ export default defineConfig({
   define: {
     'process.env': {},
   },
+  build: {
+    outDir: 'build',
+    emptyOutDir: true,
+  },
   resolve: {
       alias: [
         {find:'@components',replacement:resolve(__dirname, './src/components')},
