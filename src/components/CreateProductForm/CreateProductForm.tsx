@@ -12,7 +12,7 @@ const initialField:IShopItem = {
     brandId:'',
     typeId: '',
     img:null,
-    info: "",
+    info:[{fullDescription:''}],
 }
 interface FormProps {
   currentProduct?:IShopItem
@@ -21,7 +21,15 @@ interface FormProps {
 }
 const { TextArea } = Input;
 export const CreateProductForm = ({currentProduct,keyForm,onSubmit}:FormProps,) => {
-  const [productData, setProductData] = useState(currentProduct || initialField);
+  const [productData, setProductData] = useState<IShopItem>(() => {
+        if (currentProduct) {
+            return {
+                ...currentProduct,
+                info: currentProduct.info?.length ? currentProduct.info : [{ id: '', fullDescription: '' }]
+            };
+        }
+        return initialField;
+    });
   const setStateValue = (values:object) =>
     setProductData((prev) => ({ ...prev, ...values }));
   
@@ -30,6 +38,16 @@ export const CreateProductForm = ({currentProduct,keyForm,onSubmit}:FormProps,) 
   const handleUpload: uploadProps["onChange"] = (info) => {
     setStateValue({img:info.file})
   };
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        const newDescription = e.target.value;
+        setProductData(prev => ({
+            ...prev,
+            info: [{
+                ...(prev.info?.[0] || {}),
+                fullDescription: newDescription
+            }]
+        }));
+    };
 
   const dispatch = useAppDispatch();
   const { types } = useAppSelector((state) => state.typeReducer);
@@ -54,7 +72,8 @@ export const CreateProductForm = ({currentProduct,keyForm,onSubmit}:FormProps,) 
     fileList: productData.img ? [productData.img] : [],
     maxCount: 1,
   };
-  
+  const currentDescription = productData.info?.[0]?.fullDescription || '';
+  console.log(currentDescription)
   return (
     <div>
       <Form key={keyForm} style={{ margin: 20 }} form={form} layout="vertical" size="large">
@@ -113,14 +132,14 @@ export const CreateProductForm = ({currentProduct,keyForm,onSubmit}:FormProps,) 
           </Select>
         </Form.Item>
         <Form.Item label="Info">
-          <TextArea value={productData.info} onChange={(e) => setStateValue({info:e.target.value})} />
+          <TextArea value={currentDescription} onChange={handleDescriptionChange} />
         </Form.Item>
         <Form.Item label="Image" required>
           <Upload {...props}>
             <Button icon={<UploadOutlined />}>Click to Upload</Button>
           </Upload>
         </Form.Item>
-        <Button onClick={() => onSubmit(productData)} type="primary">Создать</Button>
+        <Button onClick={() => onSubmit(productData)} type="primary">{currentProduct ? 'Изменить' : 'Создать' }</Button>
       </Form>
     </div>
   );

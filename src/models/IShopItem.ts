@@ -6,7 +6,11 @@ export interface IShopItem {
     price:number | string,
     rating?:number,
     img:UploadFile | null,
-    info?:string,
+    fullDescription?:string,
+    info?:[{
+        id?:number,
+        fullDescription:string
+    }],
     createdAt?:Date | string,
     updatedAr?:Date | string,
     typeId:number | string,

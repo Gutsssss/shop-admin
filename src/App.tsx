@@ -12,15 +12,19 @@ import AllProductsPage from "@pages/ProductsPages/AllProductsPage/AllProductsPag
 import { CreateProductPage } from "@pages/ProductsPages/CreateProductPage/CreateProductPage";
 import { ProtectedRoute } from "@components/ProtectedRoute/ProtectedRoute";
 import { useAppDispatch } from "@hooks/redux";
-import { logoutAndRemoveToken } from "@store/reducers/ActionCreators";
+import { check, logoutAndRemoveToken } from "@store/reducers/ActionCreators";
 import { EditPage } from "@pages/ProductsPages/EditProductPage/EditProductPage";
+import { useEffect } from "react";
 const { Content, Sider } = Layout;
 function App() {
-  // const {isAuth,isLoading} = useAppSelector(state => state.userReducer)
+  // const {isAuth} = useAppSelector(state => state.userReducer)
   const dispatch = useAppDispatch();
   const handleLogout = () => {
     dispatch(logoutAndRemoveToken());
   };
+  useEffect(() => {
+    dispatch(check())
+  })
   return (
       <Layout style={{ minHeight: "100vh" }}>
         <Sider
@@ -34,7 +38,7 @@ function App() {
           }}
         >
           <NavigationBar />
-        </Sider>
+        </Sider> 
         <Content>
           <Routes>
             <Route path="/login" element={<LoginPage />} />
