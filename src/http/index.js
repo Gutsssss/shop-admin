@@ -1,10 +1,10 @@
 import axios from "axios";
 
 const $host = axios.create({
-    baseURL:import.meta.env.VITE_APP_API_URL + 'api'
+    baseURL:import.meta.env.VITE_APP_API_URL + '/api'
 })
 const $authHost = axios.create({
-    baseURL:import.meta.env.VITE_APP_API_URL + 'api'
+    baseURL:import.meta.env.VITE_APP_API_URL + '/api'
 })
 
 const authInterceptors = config => {
