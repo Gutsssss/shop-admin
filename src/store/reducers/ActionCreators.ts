@@ -67,15 +67,16 @@ export const login = (email: string, password: string) => async (dispatch: AppDi
     const { data } = await $host.post('/user/login', { email, password });
     
     const decodedUser = jwtDecode(data.token);
+    if (!data.token) throw new Error('Token is missing in response');
     localStorage.setItem('token', data.token);
     dispatch(userFetchingSuccess(decodedUser));
-    console.log('Server response:', data);
     return decodedUser;
   } catch (err:unknown) {
     let errorMessage = 'Login failed'
     if(err instanceof AxiosError && err.response?.data?.message) {
         errorMessage = err.response?.data?.message 
     }
+    console.log(err)
     dispatch(userFetchingError(errorMessage));
     throw errorMessage;
   }
