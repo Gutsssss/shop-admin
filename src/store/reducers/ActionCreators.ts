@@ -69,6 +69,7 @@ export const login = (email: string, password: string) => async (dispatch: AppDi
     const decodedUser = jwtDecode(data.token);
     localStorage.setItem('token', data.token);
     dispatch(userFetchingSuccess(decodedUser));
+    console.log('Server response:', data);
     return decodedUser;
   } catch (err:unknown) {
     let errorMessage = 'Login failed'
