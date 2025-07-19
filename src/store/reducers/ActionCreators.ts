@@ -65,7 +65,7 @@ export const login = (email: string, password: string) => async (dispatch: AppDi
   try {
     dispatch(userFetching());
     const { data } = await $host.post('/user/login', { email, password });
-    
+    console.log(data)
     const decodedUser = jwtDecode(data.token);
     if (!data.token) throw new Error('Token is missing in response');
     localStorage.setItem('token', data.token);
