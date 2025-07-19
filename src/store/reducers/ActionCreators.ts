@@ -53,7 +53,7 @@ export const createBrandOnApi = (name:string) => async (dispatch:AppDispatch) =>
 export const createTypeOnApi = (name:string) => async (dispatch:AppDispatch) => {
     dispatch(brandFetching())
     try {
-       const response =  await $authHost.post('api/type',{name:name})
+       const response =  await $authHost.post('/type',{name:name})
        dispatch(createType(response.data))
        return response.data
     }
@@ -83,7 +83,7 @@ export const login = (email: string, password: string) => async (dispatch: AppDi
 export const check = () => async (dispatch: AppDispatch) => {
     dispatch(userFetching())
     try {
-        const {data} = await $authHost.get('api/user/auth')
+        const {data} = await $authHost.get('/user/auth')
         localStorage.setItem('token',data.token)
         const decodedUser = jwtDecode(data.token)
         dispatch(userFetchingSuccess(decodedUser))
