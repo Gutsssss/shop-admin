@@ -12,7 +12,7 @@ import type { IShopItem } from "@models/IShopItem.js";
 export const fetchItems = () => async (dispatch:AppDispatch) =>{
     try {
         dispatch(itemsFetching())
-        const response = await $host.get('api/shopitem')
+        const response = await $host.get('/shopitem')
         dispatch(itemsFetchingSuccess(response.data.rows))
     }
     catch(err) {
@@ -22,7 +22,7 @@ export const fetchItems = () => async (dispatch:AppDispatch) =>{
 export const fetchTypes = () => async (dispatch:AppDispatch) =>{
     try {
         dispatch(typeFetching())
-        const response = await $host.get('api/type')
+        const response = await $host.get('/type')
         dispatch(typeFetchingSuccess(response.data))
     }
     catch(err) {
@@ -32,7 +32,7 @@ export const fetchTypes = () => async (dispatch:AppDispatch) =>{
 export const fetchBrands = () => async (dispatch:AppDispatch) =>{
     try {
         dispatch(brandFetching())
-        const response = await $host.get('api/brand')
+        const response = await $host.get('/brand')
         dispatch(brandFetchingSuccess(response.data))
     }
     catch(err) {
@@ -42,7 +42,7 @@ export const fetchBrands = () => async (dispatch:AppDispatch) =>{
 export const createBrandOnApi = (name:string) => async (dispatch:AppDispatch) => {
     dispatch(brandFetching())
     try {
-       const response =  await $authHost.post('api/brand',{name:name})
+       const response =  await $authHost.post('/brand',{name:name})
        dispatch(createBrand(response.data))
        return response.data
     }
@@ -65,7 +65,6 @@ export const login = (email: string, password: string) => async (dispatch: AppDi
   try {
     dispatch(userFetching());
     const { data } = await $host.post('/user/login', { email, password });
-    console.log(data)
     const decodedUser = jwtDecode(data.token);
     if (!data.token) throw new Error('Token is missing in response');
     localStorage.setItem('token', data.token);
@@ -116,7 +115,7 @@ export const logoutAndRemoveToken = () => async (dispatch:AppDispatch) => {
 export const deleteProductFromApi = (id:number | undefined) => async (dispatch: AppDispatch) => {
     try {
         dispatch(itemsFetching())
-        const response =  await $authHost.delete(`api/shopitem/${id}`)
+        const response =  await $authHost.delete(`/shopitem/${id}`)
         dispatch(getOneItem(response.data))
         return response
     } 
@@ -127,7 +126,7 @@ export const deleteProductFromApi = (id:number | undefined) => async (dispatch: 
 export const editProductFromApi = (product:IShopItem) => async (dispatch:AppDispatch) => {
         dispatch(itemsFetching())
     try {
-        await $authHost.post('api/shopitem/edit',product,{
+        await $authHost.post('/shopitem/edit',product,{
             headers:{
                 'Content-Type': 'multipart/form-data',
             }
@@ -140,7 +139,7 @@ export const getOneProductFromApi = (id:number) => async (dispatch:AppDispatch) 
         
     try {
         dispatch(fetchItems())
-        const response = await $host.get(`api/shopitem/${id}`)
+        const response = await $host.get(`/shopitem/${id}`)
         dispatch(getOneItem(response.data))
         return response.data
     }
@@ -152,7 +151,7 @@ export const getOneProductFromApi = (id:number) => async (dispatch:AppDispatch) 
 export const createProductOnApi = async(product:IShopItem) => async (dispatch:AppDispatch) => {
     try {
         dispatch(itemsFetching())
-        await $authHost.post('api/shopitem',product,{
+        await $authHost.post('/shopitem',product,{
             headers:{
                 'Content-Type': 'multipart/form-data',
             }
@@ -164,7 +163,7 @@ export const createProductOnApi = async(product:IShopItem) => async (dispatch:Ap
 export const searchProducts = (searchValue: string) => async (dispatch: AppDispatch) => {
   try {
     dispatch(itemsFetching());
-    const response = await $host.get(`api/shopitem/search/${searchValue}`);
+    const response = await $host.get(`/shopitem/search/${searchValue}`);
     dispatch(itemsFetchingSuccess(response.data));
     return response.data;
   } catch (err) {
