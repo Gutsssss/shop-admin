@@ -1,4 +1,4 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useAppSelector } from '@hooks/redux';
 import { type JSX } from 'react';
 
@@ -11,10 +11,19 @@ export const ProtectedRoute = ({
   children: JSX.Element;
   role?: string;
 }) => {
-  const { user, isAuth,isLoading } = useAppSelector(state => state.userReducer);
-  if (isLoading) return <Loader />;
-  if (!isAuth || user?.role !== role) {
-    return <Navigate to="/login" replace />;
+  const { user, isAuth, isLoading } = useAppSelector(state => state.userReducer);
+  const location = useLocation();
+
+  if (!isAuth && !isLoading) {
+    return <Navigate to="/login" state={{ from: location.pathname }} replace />;
+  }
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (user?.role !== role) {
+    return <Navigate to="/all" replace />;
   }
 
   return children;

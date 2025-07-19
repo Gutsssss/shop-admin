@@ -1,32 +1,44 @@
-import NavigationBar from "./layout/Navigation/NavigationBar";
+import { useEffect } from "react";
 import { Layout } from "antd";
-import HomePage from "@pages/HomePage/HomePage";
-import {
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
-import StatisticPage from "@pages/StatisticPage/StatisticPage";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import NavigationBar from "./layout/Navigation/NavigationBar";
 import LoginPage from "@pages/LoginPage/LoginPage";
 import AllProductsPage from "@pages/ProductsPages/AllProductsPage/AllProductsPage";
+import StatisticPage from "@pages/StatisticPage/StatisticPage";
 import { CreateProductPage } from "@pages/ProductsPages/CreateProductPage/CreateProductPage";
 import { ProtectedRoute } from "@components/ProtectedRoute/ProtectedRoute";
-import { useAppDispatch } from "@hooks/redux";
+import { useAppDispatch, useAppSelector } from "@hooks/redux";
 import { check, logoutAndRemoveToken } from "@store/reducers/ActionCreators";
 import { EditPage } from "@pages/ProductsPages/EditProductPage/EditProductPage";
-import { useEffect } from "react";
+
 const { Content, Sider } = Layout;
+
 function App() {
-  // const {isAuth} = useAppSelector(state => state.userReducer)
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { isLoading, isAuth } = useAppSelector(state => state.userReducer);
+
+  useEffect(() => {
+    dispatch(check());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (isAuth && window.location.pathname === "/") {
+      navigate("/all", { replace: true });
+    }
+  }, [isAuth, navigate]);
+
   const handleLogout = () => {
     dispatch(logoutAndRemoveToken());
   };
-  useEffect(() => {
-    dispatch(check())
-  })
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
-      <Layout style={{ minHeight: "100vh" }}>
+    <Layout style={{ minHeight: "100vh" }}>
+      {isAuth && (
         <Sider
           style={{
             overflow: "auto",
@@ -38,62 +50,58 @@ function App() {
           }}
         >
           <NavigationBar />
-        </Sider> 
-        <Content>
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route
-              path="/home"
-              element={
-                <ProtectedRoute role="ADMIN">
-                  <HomePage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/statistic"
-              element={
-                <ProtectedRoute role="ADMIN">
-                  <StatisticPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/all"
-              element={
-                <ProtectedRoute role="ADMIN">
-                  <AllProductsPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/create"
-              element={
-                <ProtectedRoute role="ADMIN">
-                  <CreateProductPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/edit/:id"
-              element={
-                <ProtectedRoute role="ADMIN">
-                  <EditPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="*" element={<Navigate to="/login" />} />
-            <Route
-              path="/exit"
-              action={() => {
-                handleLogout();
-              }}
-              element={null}
-            />
-          </Routes>
-        </Content>
-        
-      </Layout>
+        </Sider>
+      )}
+      <Content>
+        <Routes>
+          <Route 
+            path="/login" 
+            element={isAuth ? <Navigate to="/all" replace /> : <LoginPage />} 
+          />
+          <Route
+            path="/all"
+            element={
+              <ProtectedRoute role="ADMIN">
+                <AllProductsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/statistic"
+            element={
+              <ProtectedRoute role="ADMIN">
+                <StatisticPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/create"
+            element={
+              <ProtectedRoute role="ADMIN">
+                <CreateProductPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/edit/:id"
+            element={
+              <ProtectedRoute role="ADMIN">
+                <EditPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route 
+            path="*" 
+            element={<Navigate to={isAuth ? "/all" : "/login"} replace />} 
+          />
+          <Route
+            path="/exit"
+            action={handleLogout}
+            element={null}
+          />
+        </Routes>
+      </Content>
+    </Layout>
   );
 }
 

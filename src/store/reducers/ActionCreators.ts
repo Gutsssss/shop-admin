@@ -51,14 +51,14 @@ export const createBrandOnApi = (name:string) => async (dispatch:AppDispatch) =>
     }
 }
 export const createTypeOnApi = (name:string) => async (dispatch:AppDispatch) => {
-    dispatch(brandFetching())
+    dispatch(typeFetching())
     try {
        const response =  await $authHost.post('/type',{name:name})
        dispatch(createType(response.data))
        return response.data
     }
     catch(err) {
-        dispatch(brandFetchingError(err))
+        dispatch(typeFetchingError(err))
     }
 }
 export const login = (email: string, password: string) => async (dispatch: AppDispatch) => {
@@ -160,15 +160,18 @@ export const createProductOnApi = async(product:IShopItem) => async (dispatch:Ap
         console.log(error)
     }
 }
-export const searchProducts = (searchValue: string) => async (dispatch: AppDispatch) => {
-  try {
-    dispatch(itemsFetching());
-    const response = await $host.get(`/shopitem/search/${searchValue}`);
-    dispatch(itemsFetchingSuccess(response.data));
-    return response.data;
-  } catch (err) {
-    const error = err as Error;
-    dispatch(itemsFetchingError(error.message));
-    throw error;
-  }
-};
+export const searchProducts =
+  (searchValue: string) => async (dispatch: AppDispatch) => {
+    try {
+      dispatch(itemsFetching());
+      const response = await $host.get(`api/shopitem/search/`,{
+        params: { name: searchValue }
+      });
+      dispatch(itemsFetchingSuccess(response.data));
+      return response.data;
+    } catch (err) {
+      const error = err as Error;
+      dispatch(itemsFetchingError(error.message));
+      throw error;
+    }
+  };

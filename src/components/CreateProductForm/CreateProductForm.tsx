@@ -65,7 +65,6 @@ export const CreateProductForm = ({currentProduct,keyForm,onSubmit}:FormProps,) 
     maxCount: 1,
   };
   const currentDescription = productData.info?.[0]?.fullDescription || '';
-  console.log(currentDescription)
   return (
     <div>
       <Form key={keyForm} style={{ margin: 20 }} form={form} layout="vertical" size="large">

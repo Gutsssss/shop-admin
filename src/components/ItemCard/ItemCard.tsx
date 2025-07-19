@@ -3,11 +3,12 @@ import Meta from "antd/es/card/Meta";
 import { type IShopItem } from "../../models/IShopItem";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { useAppDispatch } from "@hooks/redux";
-import { deleteProductFromApi } from "@store/reducers/ActionCreators";
+import { deleteProductFromApi, fetchItems } from "@store/reducers/ActionCreators";
 import { Link } from "react-router-dom";
 
 type ItemCardProps = IShopItem & {messageText:string}
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const ItemCard = ({name,price,rating,id,img,messageText}:ItemCardProps) => {
     const dispatch = useAppDispatch();
     const [messageApi] = message.useMessage()
@@ -23,16 +24,17 @@ export const ItemCard = ({name,price,rating,id,img,messageText}:ItemCardProps) =
             content: `${text}`
         })
     }
-    const deleteProduct = (id: number) => {
-        try {
-            dispatch(deleteProductFromApi(id))
-            successMessage(`Товар с id:${id} успешно удален`)
-        }
-        catch(err) {
-            console.log(err)
-            errorMessage(messageText as string)
-        }
-    }
+    const deleteProduct = async (id: number) => {
+  try {
+    await dispatch(deleteProductFromApi(id));
+    successMessage(`Товар с id:${id} успешно удален`);
+    await dispatch(fetchItems());
+    
+  } catch (err) {
+    console.error('Ошибка удаления:', err);
+    errorMessage('Не удалось удалить товар');
+  }
+};
     return (
         <>
         <Card

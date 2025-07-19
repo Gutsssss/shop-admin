@@ -4,7 +4,7 @@ export interface IShopItem {
     id?:number,
     name:string,
     price:number | string,
-    rating?:number,
+    rating?:number | string,
     img:UploadFile | null,
     fullDescription?:string,
     info?:[{

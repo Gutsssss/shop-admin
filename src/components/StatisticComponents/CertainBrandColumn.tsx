@@ -11,7 +11,7 @@ interface ChartInstance {
   emit: (event: string, params: { data: { data: DataItem }; offsetY: number }) => void;
 }
 
-const DemoDefaultTooltip = () => {
+const CertainBrandColumn = () => {
   const data: DataItem[] = [
     { letter: 'A', frequency: 8167 },
     { letter: 'B', frequency: 1492 },
@@ -46,4 +46,4 @@ const DemoDefaultTooltip = () => {
   return <Column {...config} />;
 };
 
-export default DemoDefaultTooltip;
+export default CertainBrandColumn;

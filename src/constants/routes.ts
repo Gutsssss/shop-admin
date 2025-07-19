@@ -3,10 +3,6 @@ type MenuItem = Required<MenuProps>['items'][number];
 
 export const routes: MenuItem[] = [
   {
-    key: '/home',
-    label: 'Home',
-  },
-  {
     key: '/statistic',
     label: 'Statistic',
   },

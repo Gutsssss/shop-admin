@@ -2,7 +2,7 @@ import { CreateForm } from "@components/CreateForm/CreateForm";
 import { CreateProductForm } from "@components/CreateProductForm/CreateProductForm";
 import { useAppDispatch } from "@hooks/redux";
 import type { IShopItem } from "@models/IShopItem";
-import { createBrandOnApi, createProductOnApi, createTypeOnApi } from "@store/reducers/ActionCreators";
+import { createBrandOnApi, createProductOnApi, createTypeOnApi, fetchBrands, fetchItems, fetchTypes } from "@store/reducers/ActionCreators";
 import { Divider } from "antd";
 
 type ActionType = 'brand' | 'type';
@@ -24,13 +24,20 @@ export const CreateProductPage = () => {
     console.error("Error creating item:", err);
   }
 };
-  const createProduct = async (product:IShopItem) => {
-    try {
-        dispatch(await createProductOnApi(product))
-    } catch (error) {
-      console.log(error)
-    }
+  const createProduct = async (product: IShopItem) => {
+  try {
+    dispatch(await createProductOnApi(product));
+  
+    await Promise.all([
+      dispatch(fetchItems()),
+      dispatch(fetchBrands()),
+      dispatch(fetchTypes()) 
+    ]);
+    
+  } catch (error) {
+    console.error('Ошибка при создании товара:', error);
   }
+}
   return (
     <div>
       <CreateProductForm keyForm={`createForm`} onSubmit={createProduct}/>

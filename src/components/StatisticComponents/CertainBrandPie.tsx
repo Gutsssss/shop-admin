@@ -1,20 +1,9 @@
-import { Pie } from '@ant-design/charts';
-import { Loader } from '@components/Loader/Loader';
-import { useAppDispatch, useAppSelector } from '@hooks/redux';
-import { fetchBrands, fetchItems } from '@store/reducers/ActionCreators';
-import { useEffect } from 'react';
-import { configPie } from '../../Static/baseConfigPie';
-import type { IBrand } from '@models/IBrand';
-
-interface Product {
-  brandId: number | string;
-  [key: string]: any;
-}
-
-interface PieDataItem {
-  type: string;
-  value: number;
-}
+import { Pie } from "@ant-design/charts";
+import { Loader } from "@components/Loader/Loader";
+import { useAppDispatch, useAppSelector } from "@hooks/redux";
+import type { IShopItem } from "@models/IShopItem";
+import { fetchBrands, fetchItems } from "@store/reducers/ActionCreators";
+import { useEffect } from "react";
 
 const CertainBrandPie = () => {
   const dispatch = useAppDispatch();
@@ -28,30 +17,35 @@ const CertainBrandPie = () => {
 
   const filterBrands = (brandId: number): number => {
     if (!items) return 0;
-    return items.filter((prod: Product) => 
-      Number(prod.brandId) === brandId
+    return items.filter((prod: IShopItem) => 
+      Number(prod.brandId) === Number(brandId)
     ).length;
   };
 
   const modifyData = (): PieDataItem[] => {
-    if (!brands) return [];
+    if (!brands || !items) return [];
     return brands.map((elem: IBrand) => ({
       type: elem.name,
-      value: filterBrands(elem.id as number)
+      value: filterBrands(Number(elem.id))
     }));
   };
 
   const data = modifyData();
-  const config = {
-    data,
-    ...configPie
-  };
 
   if (isLoading || !data.length) {
     return <Loader />;
   }
 
-  return <Pie {...config} />;
+  return (
+    <div style={{ width: '100%', height: '400px' }}>
+      <Pie
+        data={data}
+        angleField="value"
+        colorField="type"
+        label={{ type: 'inner', offset: '-30%' }}
+        interactions={[{ type: 'element-active' }]}
+      />
+    </div>
+  );
 };
-
-export default CertainBrandPie;
+export default CertainBrandPie
