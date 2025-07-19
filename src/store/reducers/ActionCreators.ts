@@ -85,6 +85,7 @@ export const check = () => async (dispatch: AppDispatch) => {
     try {
         const {data} = await $authHost.get('/user/auth')
         localStorage.setItem('token',data.token)
+        if (!data.token) throw new Error('Token is missing in response');
         const decodedUser = jwtDecode(data.token)
         dispatch(userFetchingSuccess(decodedUser))
         return decodedUser
@@ -94,6 +95,7 @@ export const check = () => async (dispatch: AppDispatch) => {
     if(err instanceof AxiosError && err.response?.data?.message) {
         errorMessage = err.response?.data?.message 
     }
+    console.log(err)
     dispatch(userFetchingError(errorMessage));
     throw errorMessage;
   }
